@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customers - NyondoStock</title>
+
+<style>
+body {
+   font-size:20px;
+    margin: 0;
+    background-color: #f3f4f6;
+}
+
+
+    nav {
+      background-color: #1E3A8A;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-weight: bold;
+      font-size: 30px;
+
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+
+
+.container {
+    padding: 20px;
+}
+h1{
+    font-size: 35px;
+}
+
+
+
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #1e3a8a;
+    color: white;
+}
+
+
+
+</style>
+
+</head>
+<body>
+  
+      <nav>
+    <div class="logo">NyondoStock</div>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'customer' %}">Customer view</a></li>
+      <li><a href="{% url 'customer_list' %}">Customer</a></li>
+
+
+    </ul>
+  </nav>
+  <h1>Customer Management</h1>
+
+<div class="container">
+
+
+
+<table>
+        <tr>
+            <th>Name</th>
+            <th>NIN</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>product</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    {% for customer in customers %}
+        <tr>
+            <td>{{customer.name}}</td>
+            <td>{{customer.nin}}</td>
+            <td>{{customer.email}}</td>
+            <td>{{customer.contact}}</td>
+            <td>{{customer.product}}</td>
+            <td>{{customer.amount}}</td>
+          
+            
+            <td>
+                <a href="{% url 'edit_customer' customer.id %}" style="background: green; padding:5px;">Edit</a>
+                <a href="{% url 'delete_customer' customer.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a>
+            </td>
+              {% endfor %}
+        </tr>
+</table>
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NyondoStock - Add Stock</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color:#E5E7EB ;
+      color: #374151;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: 20px;
+      background-color: white;
+      margin-left: 300px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    nav {
+      background-color: #1E3A8A;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Page Title */
+    h1 {
+      margin: 1.5rem 2rem;
+      color: #1E3A8A;
+      text-align: center;
+    }
+
+   
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      background-color: #1E3A8A;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #374151;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #1E3A8A;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 20px;
+      
+      
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="logo">NyondoStock</div>
+    <ul>
+      <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'add' %}">Stock view</a></li>
+      <li><a href="{% url 'stock' %}">Stock</a></li>
+
+    </ul>
+  </nav>
+
+  <!-- Page Title -->
+  <h1>Add New Stock Item</h1>
+
+  <!-- Stock Form -->
+  <div class="container">
+    <form method="post" action="{% url 'stock' %}">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="product">Product Name</label>
+        <input type="text" id="product" name="product" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category" required>
+          <option value="">Select Category</option>
+          <option>Building Materials</option>
+          <option>Hardware</option>
+          <option>Roofing</option>
+          <option>Electrical</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Quantity in Stock</label>
+        <input type="number" id="quantity" name="quantity" required>
+      </div>
+
+      <div class="form-group">
+        <label for="cost">Cost Price</label>
+        <input type="number" name="cost_price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="selling">Selling Price</label>
+        <input type="number" name="selling_price" required>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+
+      <div class="form-group">
+        <label for="supplier">Supplier</label>
+        <input type="text" id="supplier" name="supplier">
+      </div>
+        <div class="form-group">
+        <label for="supplier">Specification</label>
+         <select id="specifications" name="specifications">
+          <option value="">item specification</option>
+          <option></option>
+          <option></option>
+          <option></option>
+          <option></option>
+           <option></option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="payment">Mode of Payment</label>
+        <select id="payment" name="payment">
+          <option value="">Select Payment Mode</option>
+          <option>Cash</option>
+          <option>Credit</option>
+          <option>Mobile Money</option>
+        </select>
+      </div>
+
+      <button type="submit" class="submit-btn">Add Stock</button>
+    </form>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 NyondoStock Hardware Inventory System
+  </footer>
+
+</body>
+</html>

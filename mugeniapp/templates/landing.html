@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NyondoStock Dashboard</title>
+  <link rel="stylesheet" href="index.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+  
+
+
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f4f6f9;
+    }
+    .head{
+        text-align: center;
+        font-family: italic;
+      background-color: #3158c1;
+        padding: 20px;
+        color: white;
+    }
+    
+
+    .sidebar {
+      background-color: #1E3A8A;
+      min-height: 110vh;
+      padding:20px;
+      font-size: 20px;
+      margin: 0px;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: white;
+      font-size: 20px;
+    
+    }
+    .sidebar a:hover{
+      background-color:#193b70 ;
+      cursor: pointer;
+    }
+
+    .card h3,
+    .card h5 {
+      margin-bottom: 10px;
+    }
+    .card:hover{
+      background-color: #669bf1;
+      cursor: pointer;  
+    }
+
+    .paid {
+      color: green;
+      font-weight: bold;
+    }
+
+    .credit {
+      color: orange;
+      font-weight: bold;
+    }
+    
+
+    table {
+      width: 100%;
+    }
+
+    .alerts li {
+      margin-bottom: 5px;
+    }
+    
+
+      footer {
+        background-color: #1e3a8a;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+      
+
+      }
+  </style>
+
+
+<body>
+    <div class="head">
+        <h1>Nyondo Stock</h1>
+</div>
+  <!-- Main Layout -->
+    <div class="row g-0">
+      <!-- Sidebar -->
+      <aside class="col-md-2 sidebar p-0">
+        <div class="p-3">
+         ➕<a href="/login.html" >Login</a><br>
+         🏘️<a href="index.html" >Dashboard</a><br>
+        🛖<a href="{% url 'stock' %}">Stock</a><br>
+          💰<a href="{% url 'sales' %}">Sales</a><br>
+          💳<a href="/credit.html">Credit scheme</a><br>
+          🛃<a href="/customer.html">Customer</a><br>
+         
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="col-md-10 p-3">
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Total Products</h3>
+                <p>1,250</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Today's Sales</h3>
+                <p>UGX 2,450,000</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Credit Customers</h3>
+                <p>38</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Low Stock Items</h3>
+                <p>12</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+            <h2>Recent Sales View</h2>
+            <table class="table table-bordered">
+                <tr>
+                  <th>Customer</th>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+                <tr>
+                  <td>John</td>
+                  <td>Cement</td>
+                  <td>UGX 120,000</td>
+                  <td><span class="paid">Paid</span></td>
+                </tr>
+                <tr>
+                  <td>Sarah</td>
+                  <td>Paint</td>
+                  <td>UGX 85,000</td>
+                  <td><span class="credit">Credit</span></td>
+                </tr>
+                <tr>
+                  <td>David</td>
+                  <td>Pipes</td>
+                  <td>UGX 200,000</td>
+                  <td><span class="paid">Paid</span></td>
+                </tr>
+
+            </table>
+        <div>
+        <h2>Stock View</h2>
+        <div class="row mb-4">
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Total Products</h3>
+                <p>1,250</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Today's Sales</h3>
+                <p>UGX 2,450,000</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Credit Customers</h3>
+                <p>38</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 mb-3">
+            <div class="card text-center">
+              <div class="card-body">
+                <h3>Low Stock Items</h3>
+                <p>12</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+    
+        
+      </main>
+      
+    </div>
+
+  </div>
+  <footer>
+    &copy; 2026 NyondoStock Hardware Inventory System
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

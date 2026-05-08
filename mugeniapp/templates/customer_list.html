@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sales - NyondoStock</title>
+  <style>
+    body {
+      background-color: #f4f6f9;
+      margin: 0;
+    }
+
+    nav {
+      background-color: #1E3A8A;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    .main {
+      margin-top: 50px;
+      margin-bottom: 50px;
+      margin-left: 250px;
+      margin-right: 250px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 30px;
+      color: #1E3A8A;
+      ;
+    }
+
+    form {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+
+    }
+
+
+
+    input {
+      width: 100%;
+      font-size: 15px;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+
+    }
+
+    label {
+      font-weight: 500;
+      margin-left: 10px;
+      font-size: 20px;
+    }
+
+
+    /* Button */
+    button {
+      width: 100%;
+      background-color: #5b7394;
+      color: white;
+      height: 40px;
+      border: none;
+      border-radius: 8px;
+    }
+
+    button:hover {
+      background-color: rgb(154, 154, 222);
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    footer {
+      background-color: #1E3A8A;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+
+
+  <!-- Main Content -->
+  <nav>
+    <div class="logo">NyondoStock</div>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'customer' %}">Customer view</a></li>
+      <li><a href="{% url 'customer_list' %}">Customer</a></li>
+
+
+    </ul>
+  </nav>
+
+  <div class="container">
+
+    <div class="main">
+
+
+      <h2>Customer Management</h2>
+
+      <form method="POST" action="{% url 'customer_list' %}">
+        {% csrf_token %}
+
+
+        <label>Name</label>
+        <input type="text" name="name" value="{{customer.name}}" required>
+
+        <label>NIN</label>
+        <input type="text" name="nin" value="{{customer.nin}}" required>
+
+        <label>Email</label>
+        <input type="email" name="email" value="{{customer.email}}" required>
+
+        <label>Contact</label>
+        <input type="number" name="contact" value="{{customer.contact}}" required>
+
+        <label>Product</label>
+        <input type="text" name="product" value="{{customer.product}}" required>
+
+        <label>Amount</label>
+        <input type="number" name="amount" value="{{customer.amount}}" required>
+        
+    <label>Date</label>
+    <input type="date" name="date" value="{{customer.date}}" required>
+
+
+        <button type="submit" class="submit-btn">Save</button>
+
+      </form>
+    </div>
+
+
+  </div>
+  <footer>
+    &copy; 2026 NyondoStock Hardware Inventory System
+  </footer>
+
+</body>
+
+</html>

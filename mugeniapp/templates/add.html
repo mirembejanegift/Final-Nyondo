@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NyondoStock - Stock Management</title>
+
+    <style>
+      /* FULL HEIGHT FIX */
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        font-family: Arial, sans-serif;
+        background-color: #e5e7eb;
+        color: #374151;
+      }
+
+      /* Navigation Bar */
+      nav {
+        background-color: #1e3a8a;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav .logo {
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      nav ul li a:hover {
+        text-decoration: underline;
+      }
+
+      /* MAIN CONTENT pushes footer */
+      .main-content {
+        flex: 1;
+      }
+
+      /* Page Title */
+      h1 {
+        margin: 1.5rem 2rem;
+        color: #1e3a8a;
+      }
+
+      /* Table */
+      table {
+        width: 95%;
+        margin: 0 auto 2rem;
+        border-collapse: collapse;
+        background-color: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      th {
+        background-color: #f3f4f6;
+        color: #1e3a8a;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #1e3a8a;
+        color: white;
+        text-align: center;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+    <nav>
+      <div class="logo">NyondoStock</div>
+      <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'stock' %}">Stock</a></li>
+        <li><a href="{% url 'add' %}">Stock view</a></li>
+      </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <h1>Stock Views</h1>
+
+      <table>
+        
+          <tr>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Quantity in Stock</th>
+            <th>Cost Price</th>
+            <th>Selling Price</th>
+            <th>Date</th>
+            <th>Supplier</th>
+            <th>Specification</th>
+            <th>Action</th>
+            <th
+          </tr>
+        
+        {% for stock in stocks %}
+          <tr>
+            <td>{{ stock.name }}</td>
+            <td>{{ stock.category }}</td>
+            <td>{{ stock.quantity }}</td>
+            <td>{{ stock.cost_price }}</td>
+            <td>{{ stock.selling_price }}</td>
+            <td>{{ stock.date }}</td>
+            <td>{{ stock.supplier }}</td>
+            <td>{{ stock.specifications }}</td>
+            <td>        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;">Edit</a>
+        <a href="{% url 'delete_stock' stock.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a></td>
+   
+          </tr>
+
+          {% endfor %}
+        
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
+  </body>
+</html>

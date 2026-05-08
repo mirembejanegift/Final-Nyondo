@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NyondoStock</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    color: #1f2937;
+}
+
+/* NAV */
+
+
+
+/* HERO */
+.hero {
+    background: #1e3a8a;
+    color: white;
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 18px;
+    max-width: 600px;
+    margin: auto;
+}
+
+/* FEATURES */
+.section {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #1e3a8a;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card h3 {
+    color: #1e3a8a;
+}
+
+/* CTA */
+.cta {
+    background: #5b7394;
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    background: white;
+    color: #1e3a8a;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.btn {
+    padding: 10px 20px;
+    background-color: #1e3a8a;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+
+/* FOOTER */
+footer {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+<!-- HERO -->
+<div class="hero">
+    <h1>NyondoStock</h1>
+    <p>
+    your trusted hardware
+    </p>
+</div>
+
+<!-- FEATURES -->
+<div class="section">
+    <h2>What You Can Do</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>📦 Track Stock</h3>
+            <p>Know exactly what is in your shop at all times.</p>
+        </div>
+
+        <div class="card">
+            <h3>💰 Record Sales</h3>
+            <p>Save every sale quickly and keep your business organized.</p>
+        </div>
+
+        <div class="card">
+            <h3>🧾 Manage Credit</h3>
+            <p>Track customers who owe you and avoid losses.</p>
+        </div>
+
+    </div>
+</div>
+
+<!-- WHY -->
+<div class="section" style="background:#fff;">
+    <h2>Why us</h2>
+    <p style="max-width:700px;">
+  we are your trusted hardware 
+  <br>
+  we make the impossible possible
+    </p>
+</div>
+
+<!-- CTA -->
+<div class="cta">
+    <h2>Ready to get started?</h2>
+    <p>Create your account and start managing your business better today.</p>
+    <a href="{% url 'login' %}" class="btn">Create Account</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
+
+</body>
+</html>
