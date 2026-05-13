@@ -118,7 +118,6 @@
 <body>
 
 
-  <!-- Main Content -->
   <nav>
     <div class="logo">NyondoStock</div>
     <ul>
@@ -136,9 +135,8 @@
 
       <h2>Customer Management</h2>
 
-      <form method="POST" action="{% url 'customer_list' %}">
+      <form method="POST" action="{% url 'edit_customer' customer.id %}">
         {% csrf_token %}
-
 
         <label>Name</label>
         <input type="text" name="name" value="{{customer.name}}" required>

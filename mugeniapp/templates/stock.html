@@ -119,7 +119,7 @@
         {% csrf_token %}
       <div class="form-group">
         <label for="product">Product Name</label>
-        <input type="text" id="product" name="product" required>
+        <input type="text" id="product" name="product"value="{{stock.product}}" required>
       </div>
 
       <div class="form-group">
@@ -135,27 +135,22 @@
 
       <div class="form-group">
         <label for="quantity">Quantity in Stock</label>
-        <input type="number" id="quantity" name="quantity" required>
+        <input type="number" id="quantity" name="quantity" value="quantity" required>
       </div>
 
       <div class="form-group">
         <label for="cost">Cost Price</label>
-        <input type="number" name="cost_price" required>
+        <input type="number" name="cost_price" value="cost_price" required>
       </div>
 
       <div class="form-group">
         <label for="selling">Selling Price</label>
-        <input type="number" name="selling_price" required>
+        <input type="number" name="selling_price" value="selling_price">
       </div>
 
       <div class="form-group">
         <label for="date">Date</label>
-        <input type="date" id="date" name="date" required>
-      </div>
-
-      <div class="form-group">
-        <label for="supplier">Supplier</label>
-        <input type="text" id="supplier" name="supplier">
+        <input type="date" id="date" name="date" value="{{stock.date}}" min="{{ one_week_ago }}" max="{{ today }}" required>
       </div>
         <div class="form-group">
         <label for="supplier">Specification</label>

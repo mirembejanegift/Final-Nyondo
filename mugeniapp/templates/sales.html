@@ -155,7 +155,9 @@
         <input type="number" name="unit_price" value="{{sale.unit_price}}" required>
 
         <label>Date</label>
-        <input type="date" name="date" value="{{sale.data}}" required>
+        <input type="date" name="date" value="{{sale.data}}" min="{{ one_week_ago }}" max="{{ today }}" required>
+          <label>Total Price</label>
+        <input type="number" name="total_price" value="{{sale.total_price}}" required>
 
         <label>Customer Name</label>
         <input type="text" name="customer_name" value="{{sale.customer_name}}" required>

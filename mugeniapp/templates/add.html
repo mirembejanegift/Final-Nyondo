@@ -120,7 +120,6 @@
             <th>Cost Price</th>
             <th>Selling Price</th>
             <th>Date</th>
-            <th>Supplier</th>
             <th>Specification</th>
             <th>Action</th>
             <th
@@ -134,9 +133,9 @@
             <td>{{ stock.cost_price }}</td>
             <td>{{ stock.selling_price }}</td>
             <td>{{ stock.date }}</td>
-            <td>{{ stock.supplier }}</td>
             <td>{{ stock.specifications }}</td>
-            <td>        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;">Edit</a>
+            <td>
+        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;">Edit</a>
         <a href="{% url 'delete_stock' stock.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a></td>
    
           </tr>
@@ -145,8 +144,7 @@
         
       </table>
     </div>
-
-    <!-- Footer -->
+    
     <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
   </body>
 </html>

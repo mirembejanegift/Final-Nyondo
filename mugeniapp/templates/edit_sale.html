@@ -136,7 +136,7 @@
 
       <h2>Sales Management</h2>
 
-      <form method="POST" action="{% url 'sales' %}">
+      <form method="POST" action="{% url 'edit_sale' sale.id %}">
         {% csrf_token %}
 
         <label for="item_name">Item Name</label>

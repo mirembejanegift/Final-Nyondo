@@ -3,23 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NyondoStock - Add Stock</title>
+  <title>Edit Stock - NyondoStock</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background-color:#E5E7EB ;
+      background-color: #E5E7EB;
       color: #374151;
     }
 
-    .container {
-      max-width: 600px;
-      padding: 20px;
-      background-color: white;
-      margin-left: 300px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
     nav {
       background-color: #1E3A8A;
       color: white;
@@ -28,10 +21,12 @@
       justify-content: space-between;
       align-items: center;
     }
+
     nav .logo {
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     nav ul {
       list-style: none;
       display: flex;
@@ -39,157 +34,168 @@
       margin: 0;
       padding: 0;
     }
+
     nav ul li a {
       color: white;
       text-decoration: none;
-      font-weight: 500;
-    }
-    nav ul li a:hover {
-      text-decoration: underline;
     }
 
-    /* Page Title */
     h1 {
-      margin: 1.5rem 2rem;
-      color: #1E3A8A;
       text-align: center;
+      color: #1E3A8A;
+      margin-top: 20px;
     }
 
-   
-    .form-group {
-      margin-bottom: 1rem;
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
     }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
     label {
       display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-    input, select {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin-bottom: 5px;
+      font-weight: bold;
     }
 
-    /* Submit Button */
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
     .submit-btn {
+      width: 100%;
+      padding: 12px;
       background-color: #1E3A8A;
       color: white;
-      padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: 4px;
-      font-weight: bold;
+      border-radius: 5px;
       cursor: pointer;
+      font-weight: bold;
     }
+
     .submit-btn:hover {
       background-color: #374151;
     }
 
-    /* Footer */
     footer {
       background-color: #1E3A8A;
       color: white;
       text-align: center;
-      padding: 20px;
+      padding: 15px;
       margin-top: 20px;
-      
-      
     }
   </style>
 </head>
+
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <div class="logo">NyondoStock</div>
-    <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Dashboard</a></li>
-      <li><a href="#">Sales</a></li>
-      <li><a href="#">Stock</a></li>
-       <li><a href="#">Deposit</a></li>
+<!-- NAV -->
+<nav>
+  <div class="logo">NyondoStock</div>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Dashboard</a></li>
+    <li><a href="#">Sales</a></li>
+    <li><a href="#">Stock</a></li>
+    <li><a href="#">Deposit</a></li>
+  </ul>
+</nav>
 
-    </ul>
-  </nav>
+<h1>Edit Stock</h1>
 
-  <!-- Page Title -->
-  <h1>Edit Stock</h1>
+<div class="container">
 
-  <!-- Stock Form -->
-  <div class="container">
-    <form method="post" action="{% url 'stock' %}">
-        {% csrf_token %}
-      <div class="form-group">
-        <label for="product">Product Name</label>
-        <input type="text" id="product" name="product" required>
-      </div>
+  <form method="post" action="{% url 'edit_stock' stock.id %}">
+    {% csrf_token %}
 
-      <div class="form-group">
-        <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="">Select Category</option>
-          <option>Building Materials</option>
-          <option>Hardware</option>
-          <option>Roofing</option>
-          <option>Electrical</option>
-        </select>
-      </div>
+    <!-- Product Name -->
+    <div class="form-group">
+      <label>Product Name</label>
+      <input type="text" name="product" value="{{ stock.name }}" required>
+    </div>
 
-      <div class="form-group">
-        <label for="quantity">Quantity in Stock</label>
-        <input type="number" id="quantity" name="quantity" required>
-      </div>
+    <!-- Category -->
+    <div class="form-group">
+      <label>Category</label>
+      <select name="category" required>
+        <option value="">Select Category</option>
+        <option value="Building Materials" {% if stock.category == "Building Materials" %}selected{% endif %}>Building Materials</option>
+        <option value="Hardware" {% if stock.category == "Hardware" %}selected{% endif %}>Hardware</option>
+        <option value="Roofing" {% if stock.category == "Roofing" %}selected{% endif %}>Roofing</option>
+        <option value="Electrical" {% if stock.category == "Electrical" %}selected{% endif %}>Electrical</option>
+      </select>
+    </div>
 
-      <div class="form-group">
-        <label for="cost">Cost Price</label>
-        <input type="number" name="cost_price" required>
-      </div>
+    <!-- Quantity -->
+    <div class="form-group">
+      <label>Quantity in Stock</label>
+      <input type="number" name="quantity" value="{{ stock.quantity }}" required>
+    </div>
 
-      <div class="form-group">
-        <label for="selling">Selling Price</label>
-        <input type="number" name="selling_price" required>
-      </div>
+    <!-- Cost Price -->
+    <div class="form-group">
+      <label>Cost Price</label>
+      <input type="number" name="cost_price" value="{{ stock.cost_price }}" required>
+    </div>
 
-      <div class="form-group">
-        <label for="date">Date</label>
-        <input type="date" id="date" name="date" required>
-      </div>
+    <!-- Selling Price -->
+    <div class="form-group">
+      <label>Selling Price</label>
+      <input type="number" name="selling_price" value="{{ stock.selling_price }}" required>
+    </div>
 
-      <div class="form-group">
-        <label for="supplier">Supplier</label>
-        <input type="text" id="supplier" name="supplier">
-      </div>
-        <div class="form-group">
-        <label for="supplier">Specification</label>
-         <select id="specifications" name="specifications">
-          <option value="">item specification</option>
-          <option></option>
-          <option></option>
-          <option></option>
-          <option></option>
-           <option></option>
-        </select>
-      </div>
+    <!-- Date -->
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" name="date" value="{{ stock.date|date:'Y-m-d' }}" required>
+    </div>
 
+    <!-- Supplier -->
+    <div class="form-group">
+      <label>Supplier</label>
+      <input type="text" name="supplier" value="{{ stock.supplier }}">
+    </div>
 
-      <div class="form-group">
-        <label for="payment">Mode of Payment</label>
-        <select id="payment" name="payment">
-          <option value="">Select Payment Mode</option>
-          <option>Cash</option>
-          <option>Credit</option>
-          <option>Mobile Money</option>
-        </select>
-      </div>
+    <!-- Specifications -->
+    <div class="form-group">
+      <label>Specification</label>
+      <select name="specifications">
+        <option value="">Select Specification</option>
+        <option value="Small" {% if stock.specifications == "Small" %}selected{% endif %}>Small</option>
+        <option value="Medium" {% if stock.specifications == "Medium" %}selected{% endif %}>Medium</option>
+        <option value="Large" {% if stock.specifications == "Large" %}selected{% endif %}>Large</option>
+      </select>
+    </div>
 
-      <button type="submit" class="submit-btn">Add Stock</button>
-    </form>
-  </div>
+    <!-- Payment -->
+    <div class="form-group">
+      <label>Mode of Payment</label>
+      <select name="payment">
+        <option value="">Select Payment Mode</option>
+        <option value="Cash" {% if stock.payment == "Cash" %}selected{% endif %}>Cash</option>
+        <option value="Credit" {% if stock.payment == "Credit" %}selected{% endif %}>Credit</option>
+        <option value="Mobile Money" {% if stock.payment == "Mobile Money" %}selected{% endif %}>Mobile Money</option>
+      </select>
+    </div>
 
-  <!-- Footer -->
-  <footer>
-    &copy; 2026 NyondoStock Hardware Inventory System
-  </footer>
+    <button type="submit" class="submit-btn">Update Stock</button>
+
+  </form>
+
+</div>
+
+<footer>
+  &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
 
 </body>
 </html>

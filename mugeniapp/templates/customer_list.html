@@ -160,7 +160,7 @@
         <input type="number" name="amount" value="{{customer.amount}}" required>
         
     <label>Date</label>
-    <input type="date" name="date" value="{{customer.date}}" required>
+    <input type="date" name="date" value="{{customer.date}}" min="{{ one_week_ago }}" max="{{ today }}" required>
 
 
         <button type="submit" class="submit-btn">Save</button>
