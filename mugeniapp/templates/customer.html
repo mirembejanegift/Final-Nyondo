@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customers - NyondoStock</title>
+  <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
 
 <style>
 body {
@@ -91,6 +92,8 @@ th {
         <li><a href="{% url 'index' %}">Home</a></li>
       <li><a href="{% url 'customer' %}">Customer view</a></li>
       <li><a href="{% url 'customer_list' %}">Customer</a></li>
+      <li><a href="{% url 'sales' %}">Sales</a></li>
+      <li><a href="{% url 'save' %}">Sales view</a
 
 
     </ul>
@@ -122,8 +125,9 @@ th {
           
             
             <td>
-                <a href="{% url 'edit_customer' customer.id %}" style="background: green; padding:5px;">Edit</a>
-                <a href="{% url 'delete_customer' customer.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a>
+                <a href="{% url 'edit_customer' customer.id %}" style="background: rgb(44, 231, 44); padding:5px;"><i class="fa-regular fa-pen-to-square" style="color: rgb(44, 39, 21);"></i></a>
+                <a href="{% url 'delete_customer' customer.id %}" style="background: rgb(234, 9, 9); padding:5px;"><i class="fa-solid fa-trash" style="color: rgb(255, 212, 59);"></i></a>
+                <a href="{% url 'customer_receipt' customer.id %}" style="background: rgb(255, 165, 0); padding:5px;"><i class="fa-solid fa-print" style="color: rgb(255, 212, 59);"></i></a>
             </td>
               {% endfor %}
         </tr>

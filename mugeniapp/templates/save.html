@@ -1,21 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>save sales</title>
-</head>
-<style>
-    body {
-  background-color: #f4f6f9;
-  margin: 0;
-  min-height: 100vh;
-}
-h2{
-  font-size: 30px;
-  color: #1E3A8A;;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Records</title>
 
+  <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      background-color: #f4f6f9;
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+    }
 
     nav {
       background-color: #1E3A8A;
@@ -25,10 +23,12 @@ h2{
       justify-content: space-between;
       align-items: center;
     }
+
     nav .logo {
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     nav ul {
       list-style: none;
       display: flex;
@@ -36,108 +36,149 @@ h2{
       margin: 0;
       padding: 0;
     }
+
     nav ul li a {
       color: white;
       text-decoration: none;
-      font-weight: 500;
     }
-    nav ul li a:hover {
-      text-decoration: underline;
+
+    h2 {
+      text-align: center;
+      color: #1E3A8A;
+      margin-top: 20px;
     }
+
     table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
+      width: 95%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-    th,
-td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
- 
-}
-td:hover {
-  background-color: rgb(154, 154, 222);
-  cursor: pointer;
-}
-th:hover {
-  background-color: rgb(154, 154, 222);
-  cursor: pointer;
-}
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
 
-th {
-  background: #5b7394;
-}
+    th {
+      background: #5b7394;
+      color: white;
+    }
 
-td a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-}
+    tr:hover {
+      background-color: #eef2ff;
+    }
 
+    .free {
+      color: green;
+      font-weight: bold;
+    }
 
-   footer {
-        background-color: #1e3a8a;
-        color: white;
-        text-align: center;
-        padding: 1rem;
-        margin-top: 18rem;
+    .paid {
+      color: red;
+      font-weight: bold;
+    }
 
-      }
+    td a {
+      text-decoration: none;
+      padding: 5px;
+      border-radius: 5px;
+    }
 
-</style>
+    footer {
+      background-color: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
 <body>
-   <nav>
-    <div class="logo">NyondoStock</div>
-    <ul>
-      <li><a href="{% url 'index' %}">Home</a></li>
-      <li><a href="{% url 'sales' %}">Sales</a></li>
-      <li><a href="{% url 'save' %}">Sales view</a></li>
 
-    </ul>
-  </nav>
-     <div class="card p-4">
-        <h2>Sales Records</h2>
+<!-- NAV -->
+<nav>
+  <div class="logo">NyondoStock</div>
+  <ul>
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li><a href="{% url 'sales' %}">Sales</a></li>
+    <li><a href="{% url 'save' %}">Sales View</a></li>
+  </ul>
+</nav>
 
-        <table class="table table-striped mt-3">
-            <tr>
-              <th>Item</th>
-              <th>Qty</th>
-              <th>Price</th>
-              <th>Date</th>
-              <th>Total price</th>
-              <th>Customer_Name</th>
-              <th>Customer_Contact</th>
-              <th>Action</th>
-            </tr>
-            {% for sale in sales %}
-            <tr>
-              <td>{{sale.name}}</td>
-              <td>{{sale.quantity}}</td>
-              <td>{{sale.unit_price}}</td>
-              <td>{{sale.date}}</td>
-              <td>{{sale.total_price}}</td>
-              <td>{{sale.customer_name}}</td>
-              <td>{{sale.customer_contact}}</td>
-                    <td>
-        <a href="{% url 'edit_sale' sale.id %}" style="background: green; padding:5px;">Edit</a>
-        <a href="{% url 'delete_sale' sale.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a>
-        <a href="{% url 'sales_receipt' sale.id %}" style="background: orange; padding:5px;">Print</a>
-      </td>
-            </tr>
-            {% endfor %}
-         
-        </table>
-      </div>
+<!-- TITLE -->
+<h2>Sales Records</h2>
 
-    </main>
+<!-- TABLE -->
+<table>
 
-  </div>
+  <tr>
+    <th>Item</th>
+    <th>Qty</th>
+    <th>Unit Price</th>
+    <th>Date</th>
+    <th>Total</th>
+    <th>Distance (KM)</th>
+    <th>Transport</th>
+    <th>Grand Total</th>
+    <th>Customer</th>
+    <th>Contact</th>
+    <th>Action</th>
+  </tr>
+
+  {% for sale in sales %}
+
+  <tr>
+
+    <td>{{ sale.name }}</td>
+    <td>{{ sale.quantity }}</td>
+    <td>{{ sale.unit_price }}</td>
+    <td>{{ sale.date }}</td>
+
+    <td>{{ sale.total_price }}</td>
+
+    <td>{{ sale.distance }}</td>
+
+    <!-- TRANSPORT DISPLAY -->
+    {% if sale.transport_fee == 0 %}
+      <td class="free">FREE</td>
+    {% else %}
+      <td class="paid">{{ sale.transport_fee }}</td>
+    {% endif %}
+
+    <td><b>{{ sale.grand_total }}</b></td>
+
+    <td>{{ sale.customer_name }}</td>
+    <td>{{ sale.customer_contact }}</td>
+
+    <td>
+      <a href="{% url 'edit_sale' sale.id %}" style="background: green;">
+        <i class="fa fa-edit" style="color:white;"></i>
+      </a>
+
+      <a href="{% url 'delete_sale' sale.id %}" style="background: red;">
+        <i class="fa fa-trash" style="color:white;"></i>
+      </a>
+
+      <a href="{% url 'sales_receipt' sale.id %}" style="background: orange;">
+        <i class="fa fa-print" style="color:white;"></i>
+      </a>
+    </td>
+
+  </tr>
+
+  {% endfor %}
+
+</table>
+
+<!-- FOOTER -->
 <footer>
-    &copy; 2026 NyondoStock Hardware Inventory System
-  </footer>
-
+  &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
 
 </body>
 </html>

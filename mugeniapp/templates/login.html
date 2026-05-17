@@ -1,93 +1,103 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="login.css" />
-    <style>
-        .container {
-  height: 100vh;
-  background-color:white;
-   text-align: center; 
-  margin-top: 80px;
-  margin-right: 380px;
-  margin-bottom: 10px;
-  margin-left: 380px;
-  height: 100vh;
-  border-radius: 10px;
-}
-body {
-  background: #1E3A8A;
-  background-repeat: no-repeat;
-}
-.header {
-  padding: 10px;
-  margin-top: 25px;
-  margin-bottom: 15px;
-}
-button {
-  background-color:#5b7394 ;
-  border-radius: 10px;
-  width: 90%;
-  height: 50px;
-  color: white;
-}
-/* button:hover{
-    background-color: rgb(4, 4, 62);
-} */
-input {
-  font-size: 30px;
-  width: 90%;
-  border-radius: 10px;
-  background-color: white;
-  
-}
-label {
-  font-size: 25px;
-  text-align: left;
-  display: block;
-  margin-left: 30px;
-}
-p {
-  font-size: 20px;
-}
-a {
-  color: purple;
-}
-input::placeholder {
-  font-size: 15px;
-padding: 5px;
-}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
 
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>Welcome Back!</h1>
-      </div>
-      <form>
-        <label for="email">Email:</label>
-        <input
-          type="text"
-          id="email"
-          name="emai"
-          placeholder="Username"
-          required
-        /><br />
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="password"
-          required
-        /><br /><br />
-        <button type="submit">LOGIN</button>
-        <p>Don't have an account? <a href="{% url 'sing_up' %}">Sign up</a></p>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #1E3A8A;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-      </form>
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 420px;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      color: #1E3A8A;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1E3A8A;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      background: #1E3A8A;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0f255f;
+    }
+
+    .footer {
+      margin-top: 15px;
+      font-size: 12px;
+      color: gray;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Welcome Back</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Enter username" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter password" required>
+
+      <button type="submit">LOGIN</button>
+    </form>
+
+    <div class="footer">
+      NyondoStock System
     </div>
-  </body>
+  </div>
+
+</body>
 </html>

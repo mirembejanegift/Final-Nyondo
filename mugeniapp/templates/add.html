@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NyondoStock - Stock Management</title>
-
+  <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
     <style>
-      /* FULL HEIGHT FIX */
       html,
       body {
         height: 100%;
@@ -104,6 +103,8 @@
         <li><a href="{% url 'index' %}">Home</a></li>
         <li><a href="{% url 'stock' %}">Stock</a></li>
         <li><a href="{% url 'add' %}">Stock view</a></li>
+        <li><a href="{% url 'supplier' %}">Supplier</a></li>
+        <li><a href="{% url 'supplier_view' %}">Supplier view</a></li>
       </ul>
     </nav>
 
@@ -122,7 +123,6 @@
             <th>Date</th>
             <th>Specification</th>
             <th>Action</th>
-            <th
           </tr>
         
         {% for stock in stocks %}
@@ -135,8 +135,9 @@
             <td>{{ stock.date }}</td>
             <td>{{ stock.specifications }}</td>
             <td>
-        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;">Edit</a>
-        <a href="{% url 'delete_stock' stock.id %}" style="background: rgb(185, 59, 59); padding:5px;">Delete</a></td>
+        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;"><i class="fa-regular fa-pen-to-square"></i></a>
+        <a href="{% url 'delete_stock' stock.id %}" style="background: rgb(185, 59, 59); padding:5px;"><i class="fa-solid fa-trash"></i></a>
+      </td>
    
           </tr>
 

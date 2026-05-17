@@ -131,26 +131,26 @@
         </select>
 
         <label>Supplier</label>
-        <input  type="text" name="supplier_name" value="supplier_name" required> 
+        <input  type="text" name="supplier_name" value="{{ supplier.supplier_name }}" required> 
 
         <label>quatity</label>
-        <input type="number" name="quantity" value="{{ quantity }}" required>
+        <input type="number" name="quantity" value="{{ supplier.quantity }}" required>
 
 
      <label> cost_price</label>
-     <input type="number" name="cost_price" value="{{ cost_price }}" required>
+     <input type="number" name="cost_price" value="{{ supplier.cost_price }}" required>
 
         <label>Date Supplied</label>
-        <input type="date" name="date" value="{{ date }}" required>
+        <input type="date" name="date" value="{{ supplier.date }}" required>
 
-        <label>Payment Method</label>
-        <select name="payment_method" required>
-            <option value="cash">Cash</option>
-            <option value="credit">Credit</option>
-        </select>
+   <select name="method_of_payment" required>
+    <option value="cash" {% if supplier.method_of_payment == "cash" %}selected{% endif %}>Cash</option>
+    <option value="credit" {% if supplier.method_of_payment == "credit" %}selected{% endif %}>Credit</option>
+</select>
+
 
         <label>Amount Paid</label>
-        <input type="number" name="amount_paid" value="{{ amount_paid }}" placeholder="Enter amount paid (if credit)">
+        <input type="number" name="amount_paid" value="{{ supplier.amount_paid }}" placeholder="Enter amount paid (if credit)">
 
         <button type="submit">Add Supply</button>
     </form>

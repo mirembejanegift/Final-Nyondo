@@ -11,7 +11,7 @@
         }
 
         .receipt-container {
-            width: 400px;
+            width: 420px;
             margin: 30px auto;
             background: #fff;
             padding: 20px;
@@ -35,21 +35,31 @@
             font-size: 14px;
         }
 
-        .details {
+        .section {
             margin-top: 15px;
             font-size: 14px;
         }
 
-        .items {
-            margin-top: 15px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
+        .line {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
         }
 
         .total {
             margin-top: 15px;
             border-top: 2px solid #000;
             padding-top: 10px;
+            font-weight: bold;
+        }
+
+        .free {
+            color: green;
+            font-weight: bold;
+        }
+
+        .paid {
+            color: red;
             font-weight: bold;
         }
 
@@ -60,7 +70,6 @@
         }
 
         .print-btn {
-            display: block;
             width: 100%;
             margin-top: 15px;
             padding: 10px;
@@ -76,12 +85,12 @@
         }
 
         @media print {
-            body {
-                background: #fff;
-            }
-
             .print-btn {
                 display: none;
+            }
+
+            body {
+                background: white;
             }
 
             .receipt-container {
@@ -97,33 +106,84 @@
 
 <div class="receipt-container">
 
+    <!-- HEADER -->
     <div class="header">
         <h2>NYONDO GENERAL HARDWARE</h2>
         <p>Nansana, Uganda</p>
         <p>Tel: 0700000000</p>
     </div>
 
-    <div class="details">
-        <p><strong>Receipt No:</strong> {{ sale.id }}</p>
-        <p><strong>Date:</strong> {{ sale.date }}</p>
+    <!-- CUSTOMER INFO -->
+    <div class="section">
+        <div class="line">
+            <span><strong>Receipt No:</strong></span>
+            <span>{{ sale.id }}</span>
+        </div>
+
+        <div class="line">
+            <span><strong>Date:</strong></span>
+            <span>{{ sale.date }}</span>
+        </div>
+
+        <div class="line">
+            <span><strong>Customer:</strong></span>
+            <span>{{ sale.customer_name }}</span>
+        </div>
+
+        <div class="line">
+            <span><strong>Phone:</strong></span>
+            <span>{{ sale.customer_contact }}</span>
+        </div>
     </div>
 
-    <div class="details">
-        <p><strong>Customer:</strong> {{ sale.customer_name }}</p>
-        <p><strong>Phone:</strong> {{ sale.customer_contact }}</p>
+    <!-- ITEM INFO -->
+    <div class="section">
+        <div class="line">
+            <span>Item</span>
+            <span>{{ sale.name.name }}</span>
+        </div>
+
+        <div class="line">
+            <span>Quantity</span>
+            <span>{{ sale.quantity }}</span>
+        </div>
+
+        <div class="line">
+            <span>Unit Price</span>
+            <span>UGX {{ sale.unit_price }}</span>
+        </div>
+
+        <div class="line">
+            <span>Distance</span>
+            <span>{{ sale.distance }} KM</span>
+        </div>
+
+        <div class="line">
+            <span>Transport</span>
+
+            {% if sale.transport_fee == 0 %}
+                <span class="free">FREE</span>
+            {% else %}
+                <span class="paid">UGX {{ sale.transport_fee }}</span>
+            {% endif %}
+        </div>
+
+        <div class="line">
+            <span>Total</span>
+            <span>UGX {{ sale.total_price }}</span>
+        </div>
     </div>
 
-    <div class="items">
-        <p><strong>Item:</strong> {{ sale.name.name }}</p>
-        <p><strong>Quantity:</strong> {{ sale.quantity }}</p>
-        <p><strong>Unit Price:</strong> UGX {{ sale.unit_price }}</p>
-        <p><strong>Total:</strong> UGX {{ sale.total_price }}</p>
+    <!-- GRAND TOTAL -->
+     
+    <div class="total">
+        <div class="line">
+            <span>GRAND TOTAL</span>
+            <span>UGX {{ sale.grand_total }}</span>
+        </div>
     </div>
 
-    <!-- <div class="total">
-        <p>Grand Total: UGX {{ sale.total_price }}</p>
-    </div> -->
-
+    <!-- FOOTER -->
     <div class="footer">
         <p>Thank you for your business!</p>
     </div>
@@ -134,7 +194,7 @@
 
 <!-- AUTO PRINT -->
 <script>
-    window.onload = function() {
+    window.onload = function () {
         window.print();
     }
 </script>

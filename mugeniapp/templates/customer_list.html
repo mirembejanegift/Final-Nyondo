@@ -122,12 +122,11 @@
   <nav>
     <div class="logo">NyondoStock</div>
     <ul>
-        <li><a href="{% url 'index' %}">Home</a></li>
+      <li><a href="{% url 'index' %}">Home</a></li>
       <li><a href="{% url 'customer' %}">Customer view</a></li>
       <li><a href="{% url 'customer_list' %}">Customer</a></li>
-
-
-    </ul>
+      <li><a href="{% url 'sales' %}">Sales</a></li>
+      <li><a href="{% url 'save' %}">Sales view</a </ul>
   </nav>
 
   <div class="container">
@@ -151,16 +150,19 @@
         <input type="email" name="email" value="{{customer.email}}" required>
 
         <label>Contact</label>
-        <input type="number" name="contact" value="{{customer.contact}}" required>
+        <input type="tel" name="contact" value="{{ customer.contact }}" pattern="\d{10}" minlength="10" maxlength="10"
+          required placeholder="Enter 10-digit phone number">
+
+
 
         <label>Product</label>
         <input type="text" name="product" value="{{customer.product}}" required>
 
         <label>Amount</label>
         <input type="number" name="amount" value="{{customer.amount}}" required>
-        
-    <label>Date</label>
-    <input type="date" name="date" value="{{customer.date}}" min="{{ one_week_ago }}" max="{{ today }}" required>
+
+        <label>Date</label>
+        <input type="date" name="date" value="{{customer.date}}" min="{{ one_week_ago }}" max="{{ today }}" required>
 
 
         <button type="submit" class="submit-btn">Save</button>

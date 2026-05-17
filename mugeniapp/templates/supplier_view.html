@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+          <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
     <style>
+          body {
+              font-family: Arial, sans-serif;
+              background-color: #f4f6f9;
+              margin: 0;
+              font-size: 20px;
+          }
         nav {
       background-color: #1E3A8A;
       color: white;
@@ -85,35 +92,49 @@
       <li><a href="{% url 'index' %}">Home</a></li>
       <li><a href="{% url 'supplier' %}">Supplier</a></li>
       <li><a href="{% url 'supplier_view' %}">Supplier view</a></li>
+      <li><a href="{% url 'stock' %}">Stock</a></li>
+      <li><a href="{% url 'add' %}">Stock view</a></li>
 
     </ul>
   </nav>
+  <div>
+    <h1>Supplier Views</h1>
+  </div>
      <table>
             <tr>
                 <th>Item</th>
-                <th>Supplier</th>
                   <th>Quantity</th>
-                <th>Price</th>
+                   <th>Supplier</th>
+                   <th>Contact</th>
+                <th>unit_price</th>
+                <th>Total</th>
                 <th>Date</th>
-                <th>payment method</th>
-                <th>Amount paid</th>
+                <th>Payment Method</th>
+                <th>Amount Paid</th>
+                <th>Balance</th>
                 <th>Action</th>
             </tr>
 
           {% for supply in supplies %}
 <tr>
     <td>{{ supply.stock.name }}</td>
+    <td>{{ supply.quantity }}</td>
     <td>{{ supply.supplier_name }}</td>
-    <td>{{ supply.quantity_supplied }}</td>
+    <td>{{ supply.supplier_contact }}</td>
     <td>{{ supply.cost_price }}</td>
-    <td>{{ supply.date_supplied }}</td>
-    <td>{{ supply.payment_method }}</td>
+    <td>{{ supply.total_cost }}</td>
+    <td>{{ supply.date }}</td>
+    <td>{{ supply.method_of_payment }}</td>
     <td>{{ supply.amount_paid }}</td>
+    <td>{{ supply.balance }}</td>
     <td>
-        <a href="{% url 'edit_supplier' supply.id %}">Edit</a> |
-        <a href="{% url 'delete_supplier' supply.id %}">Delete</a>
+        <a href="{% url 'edit_supplier' supply.id %}" style="background: rgb(255, 165, 0); padding:5px;"><i class="fa-regular fa-pen-to-square"></i></a> |
+        <a href="{% url 'delete_supplier' supply.id %}" style="background: red; padding:5px;""><i class="fa-solid fa-trash"></i></a>
+        <a href="{% url 'supplier_receipt' supply.id %}" style="background: rgb(255, 165, 0); padding:5px;"><i class="fa-solid fa-print" style="color: rgb(255, 212, 59);"></i></a>
+    </td>
 </tr>
 {% endfor %}
+
                 
     </table> 
     

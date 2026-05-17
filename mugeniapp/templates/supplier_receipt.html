@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Supplier Receipt - NyondoStock</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #d1e0e0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #1E3A8A;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: #1E3A8A;
+        }
+
+        .details p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .total {
+            margin-top: 20px;
+            padding: 10px;
+            background: #e8f0ff;
+            border-left: 5px solid #1E3A8A;
+            font-weight: bold;
+        }
+
+        .balance {
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffe8e8;
+            border-left: 5px solid #c0392b;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+            color: gray;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #1E3A8A;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #162c66;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h2>Supplier Receipt</h2>
+        <p>NyondoStock Inventory System</p>
+    </div>
+
+    <div class="details">
+      <p><span class="label">Item:</span> {{ supplier.stock.name }}</p>
+<p><span class="label">Supplier:</span> {{ supplier.supplier_name }}</p>
+<p><span class="label">Quantity:</span> {{ supplier.quantity }}</p>
+<p><span class="label">Cost Price:</span> UGX {{ supplier.cost_price }}</p>
+<p><span class="label">Amount Paid:</span> UGX {{ supplier.amount_paid }}</p>
+<p><span class="label">Payment Method:</span> {{ supplier.method_of_payment }}</p>
+<p><span class="label">Date:</span> {{ supplier.date }}</p>
+    </div>
+
+    <div class="total">
+        Total Cost: UGX {{ total_cost }}
+    </div>
+
+    <div class="balance">
+        Balance: UGX {{ balance }}
+    </div>
+
+        <a href="#" class="btn" onclick="window.print()">Print Receipt</a>
+
+    <div class="footer">
+        © {{ now|date:"Y" }} NyondoStock. All rights reserved.
+    </div>
+
+</div>
+
+</body>
+</html>
