@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NyondoStock Reports</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      background: #f3f4f6;
+    }
+
+    nav {
+      background: #1e3a8a;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin: 0;
+      color: #1e3a8a;
+    }
+
+    .card p {
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .section {
+      margin-top: 2rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 0.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .danger {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<nav>NyondoStock - Reports Dashboard</nav>
+
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards">
+
+    <div class="card">
+      <h2>Total Stock Items</h2>
+      <p>{{ total_stock_items }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Total Quantity</h2>
+      <p>{{ total_stock_quantity }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Total Customers</h2>
+      <p>{{ total_customers }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Total Sales</h2>
+      <p>UGX {{ total_sales }}</p>
+    </div>
+
+    <div class="card">
+      <h2>Suppliers</h2>
+      <p>{{ total_suppliers }}</p>
+    </div>
+
+  </div>
+
+  <!-- LOW STOCK -->
+  <div class="section">
+    <h2>⚠ Low Stock Items</h2>
+
+    <ul>
+      {% for item in low_stock_items %}
+        <li class="danger">{{ item.name }} - {{ item.quantity }} left</li>
+      {% empty %}
+        <li>No low stock items</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- OUT OF STOCK -->
+  <div class="section">
+    <h2>❌ Out of Stock</h2>
+
+    <ul>
+      {% for item in out_of_stock %}
+        <li class="danger">{{ item.name }}</li>
+      {% empty %}
+        <li>All items are in stock</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+</div>
+
+</body>
+</html>

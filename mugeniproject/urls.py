@@ -29,7 +29,7 @@ urlpatterns = [
     path('save/', views.save, name='save'),
     path('delete-sale/<int:id>/', views.delete_sale, name='delete_sale'),
     path('sales_receipt/<int:id>/', views.sales_receipt, name='sales_receipt'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+   path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),                                                                                
     path('edit_sale/<int:id>/', views.edit_sale, name='edit_sale'),
     path('customer/', views.customer, name='customer'),
@@ -42,5 +42,6 @@ urlpatterns = [
     path('edit_supplier/<int:id>/', views.edit_supplier, name='edit_supplier'),
     path('delete_supplier/<int:id>/', views.delete_supplier, name='delete_supplier'),
     path('supplier_receipt/<int:id>/', views.supplier_receipt, name='supplier_receipt'),
+    path('reports/', views.reports, name='reports'),
 
 ]

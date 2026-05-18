@@ -5,6 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sales - NyondoStock</title>
+  <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
   <style>
     body {
       background-color: #f4f6f9;
@@ -41,6 +42,10 @@
 
     nav ul li a:hover {
       text-decoration: underline;
+    }
+
+    nav ul li a i {
+      margin-right: 0.35rem;
     }
 
     .main {
@@ -122,10 +127,8 @@
   <nav>
     <div class="logo">NyondoStock</div>
     <ul>
-      <li><a href="{% url 'add' %}">saved sales</a></li>
-      <li><a href="{% url 'sales' %}">Sales</a></li>
-
-
+      <li><a href="{% url 'add' %}"><i class="fa-solid fa-table-list"></i>Saved Sales</a></li>
+      <li><a href="{% url 'sales' %}"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
     </ul>
   </nav>
 

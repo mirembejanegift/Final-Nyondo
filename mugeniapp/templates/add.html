@@ -1,151 +1,339 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NyondoStock - Stock Management</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NyondoStock - Stock Management</title>
+
   <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
-    <style>
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-      }
 
-      body {
-        display: flex;
-        flex-direction: column;
-        font-family: Arial, sans-serif;
-        background-color: #e5e7eb;
-        color: #374151;
-      }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      /* Navigation Bar */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #374151;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVIGATION */
+    nav {
+      background: #1e3a8a;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: #c7d2fe;
+    }
+
+    nav ul li a i {
+      margin-right: 0.4rem;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-header h1 {
+      color: #1e3a8a;
+      font-size: 2rem;
+    }
+
+    .add-btn {
+      background: #16a34a;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border-radius: 0.5rem;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .add-btn:hover {
+      background: #15803d;
+    }
+
+    /* TABLE CONTAINER */
+    .table-container {
+      background: white;
+      border-radius: 1rem;
+      overflow-x: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1000px;
+    }
+
+    thead {
+      background: #1e3a8a;
+      color: white;
+    }
+
+    th {
+      padding: 1rem;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    tbody tr {
+      transition: 0.2s;
+    }
+
+    tbody tr:hover {
+      background: #f9fafb;
+    }
+
+    /* ACTION BUTTONS */
+    .actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .icon-btn {
+      width: 2.3rem;
+      height: 2.3rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.08);
+    }
+
+    .edit-btn {
+      background: #16a34a;
+    }
+
+    .delete-btn {
+      background: #dc2626;
+    }
+
+    /* STOCK BADGE */
+    .stock-badge {
+      background: #dbeafe;
+      color: #1d4ed8;
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: auto;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+
       nav {
-        background-color: #1e3a8a;
-        color: white;
-        padding: 1rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      nav .logo {
-        font-weight: bold;
-        font-size: 1.2rem;
+        flex-direction: column;
+        gap: 1rem;
       }
 
       nav ul {
-        list-style: none;
-        display: flex;
-        gap: 1.5rem;
-        margin: 0;
-        padding: 0;
+        flex-wrap: wrap;
+        justify-content: center;
       }
 
-      nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
+      .page-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
       }
 
-      nav ul li a:hover {
-        text-decoration: underline;
+      .page-header h1 {
+        font-size: 1.5rem;
       }
+    }
 
-      /* MAIN CONTENT pushes footer */
-      .main-content {
-        flex: 1;
-      }
+  </style>
+</head>
 
-      /* Page Title */
-      h1 {
-        margin: 1.5rem 2rem;
-        color: #1e3a8a;
-      }
+<body>
 
-      /* Table */
-      table {
-        width: 95%;
-        margin: 0 auto 2rem;
-        border-collapse: collapse;
-        background-color: white;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      }
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="logo">NyondoStock</div>
 
-      th,
-      td {
-        padding: 0.75rem;
-        text-align: left;
-        border-bottom: 1px solid #e5e7eb;
-      }
+    <ul>
+      <li>
+        <a href="{% url 'index' %}">
+          <i class="fa-solid fa-house"></i>Home
+        </a>
+      </li>
 
-      th {
-        background-color: #f3f4f6;
-        color: #1e3a8a;
-      }
+      <li>
+        <a href="{% url 'stock' %}">
+          <i class="fa-solid fa-boxes-stacked"></i>Stock
+        </a>
+      </li>
 
-      /* Footer */
-      footer {
-        background-color: #1e3a8a;
-        color: white;
-        text-align: center;
-        padding: 1rem;
-      }
-    </style>
-  </head>
+      <li>
+        <a href="{% url 'add' %}">
+          <i class="fa-solid fa-eye"></i>Stock View
+        </a>
+      </li>
 
-  <body>
-    <!-- Navigation -->
-    <nav>
-      <div class="logo">NyondoStock</div>
-      <ul>
-        <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'stock' %}">Stock</a></li>
-        <li><a href="{% url 'add' %}">Stock view</a></li>
-        <li><a href="{% url 'supplier' %}">Supplier</a></li>
-        <li><a href="{% url 'supplier_view' %}">Supplier view</a></li>
-      </ul>
-    </nav>
+      <li>
+        <a href="{% url 'supplier' %}">
+          <i class="fa-solid fa-truck"></i>Supplier
+        </a>
+      </li>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-content">
-      <h1>Stock Views</h1>
+      <li>
+        <a href="{% url 'supplier_view' %}">
+          <i class="fa-solid fa-warehouse"></i>Supplier View
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <div class="page-header">
+      <h1>Stock Inventory</h1>
+
+      <a href="{% url 'stock' %}" class="add-btn">
+        <i class="fa-solid fa-plus"></i> Add Stock
+      </a>
+    </div>
+
+    <div class="table-container">
 
       <table>
-        
+
+        <thead>
           <tr>
             <th>Product Name</th>
             <th>Category</th>
-            <th>Quantity in Stock</th>
+            <th>Quantity</th>
             <th>Cost Price</th>
             <th>Selling Price</th>
             <th>Date</th>
-            <th>Specification</th>
-            <th>Action</th>
+            <th>Specifications</th>
+            <th>Actions</th>
           </tr>
-        
-        {% for stock in stocks %}
+        </thead>
+
+        <tbody>
+
+          {% for stock in stocks %}
+
           <tr>
+
             <td>{{ stock.name }}</td>
+
             <td>{{ stock.category }}</td>
-            <td>{{ stock.quantity }}</td>
-            <td>{{ stock.cost_price }}</td>
-            <td>{{ stock.selling_price }}</td>
-            <td>{{ stock.date }}</td>
-            <td>{{ stock.specifications }}</td>
+
             <td>
-        <a href="{% url 'edit_stock' stock.id %}" style="background: green; padding:5px;"><i class="fa-regular fa-pen-to-square"></i></a>
-        <a href="{% url 'delete_stock' stock.id %}" style="background: rgb(185, 59, 59); padding:5px;"><i class="fa-solid fa-trash"></i></a>
-      </td>
-   
+              <span class="stock-badge">
+                {{ stock.quantity }} Units
+              </span>
+            </td>
+
+            <td>UGX {{ stock.cost_price }}</td>
+
+            <td>UGX {{ stock.selling_price }}</td>
+
+            <td>{{ stock.date }}</td>
+
+            <td>{{ stock.specifications }}</td>
+
+            <td>
+              <div class="actions">
+
+                <a class="icon-btn edit-btn"
+                   href="{% url 'edit_stock' stock.id %}"
+                   title="Edit Stock">
+
+                  <i class="fa-regular fa-pen-to-square"></i>
+                </a>
+
+                <a class="icon-btn delete-btn"
+                   href="{% url 'delete_stock' stock.id %}"
+                   title="Delete Stock">
+
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+
+              </div>
+            </td>
+
           </tr>
 
           {% endfor %}
-        
+
+        </tbody>
+
       </table>
+
     </div>
-    
-    <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
-  </body>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 NyondoStock Hardware Inventory System
+  </footer>
+
+</body>
 </html>

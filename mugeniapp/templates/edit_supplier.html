@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supply Page</title>
+    <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
 
     <style>
 
@@ -36,6 +37,9 @@
     }
     nav ul li a:hover {
       text-decoration: underline;
+    }
+    nav ul li a i {
+      margin-right: 0.35rem;
     }
         body {
             font-family: Arial, sans-serif;
@@ -110,10 +114,9 @@
    <nav>
     <div class="logo">NyondoStock</div>
     <ul>
-      <li><a href="{% url 'index' %}">Home</a></li>
-      <li><a href="{% url 'sales' %}">Sales</a></li>
-      <li><a href="{% url 'save' %}">Sales view</a></li>
-
+      <li><a href="{% url 'index' %}"><i class="fa-solid fa-house"></i>Home</a></li>
+      <li><a href="{% url 'sales' %}"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
+      <li><a href="{% url 'save' %}"><i class="fa-solid fa-table-list"></i>Sales View</a></li>
     </ul>
   </nav>
 

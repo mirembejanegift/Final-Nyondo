@@ -14,7 +14,9 @@ class Stock(models.Model):
 
 
     def __str__(self):
-        return self.name
+     return self.name
+    
+
 
 class Sales(models.Model):
     name = models.ForeignKey(Stock, on_delete=models.CASCADE)
@@ -31,7 +33,7 @@ class Sales(models.Model):
     grand_total = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return self.name.name
     
 
 class Customer(models.Model):
@@ -40,7 +42,7 @@ class Customer(models.Model):
     email = models.CharField(max_length=100)
     contact = models.CharField(max_length=100)
     product = models.CharField(max_length=100 ,null=True)
-    amount = models.PositiveIntegerField(default=0)
+    amount = models.IntegerField(default=0)
     date = models.DateField(default=now)
     method_of_payment = models.CharField(max_length=100,default="Cash")
     def __str__(self):
@@ -61,9 +63,10 @@ class Supplier(models.Model):
     cost_price = models.PositiveIntegerField(default=0)
     total_cost = models.PositiveIntegerField(default=0 , blank=True, null=True)
     date = models.DateField()
-    method_of_payment = models.CharField(max_length=100,default="Cash")
-    amount_paid = models.PositiveIntegerField(default=0)
-    balance = models.PositiveIntegerField(default=0, blank=True, null=True)    
+
+    method_of_payment = models.CharField(max_length=50, default="Credit")
+    amount_paid = models.IntegerField(default=0)
+    balance = models.IntegerField(default=0, blank=True, null=True)    
 
     def __str__(self):
         return self.supplier_name
