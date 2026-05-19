@@ -24,8 +24,6 @@
       flex-direction:column;
     }
 
-    /* NAVBAR */
-
     nav{
       background:#1E3A8A;
       padding:18px 40px;
@@ -33,6 +31,32 @@
       justify-content:space-between;
       align-items:center;
       box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .header-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .add-sale-btn{
+      background:#2563eb;
+      color:white;
+      text-decoration:none;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:bold;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:0.3s;
+    }
+
+    .add-sale-btn:hover{
+      background:#1d4ed8;
+      transform:translateY(-2px);
     }
 
     .logo{
@@ -62,8 +86,6 @@
       margin-right: 0.35rem;
     }
 
-    /* PAGE HEADER */
-
     .page-header{
       padding:30px 40px 10px;
     }
@@ -78,8 +100,6 @@
       color:#6b7280;
       font-size:16px;
     }
-
-    /* TABLE SECTION */
 
     .table-section{
       padding:20px 40px 40px;
@@ -117,8 +137,6 @@
       background:#f9fafb;
     }
 
-    /* TRANSPORT STATUS */
-
     .free{
       color:#16a34a;
       font-weight:bold;
@@ -128,8 +146,6 @@
       color:#dc2626;
       font-weight:bold;
     }
-
-    /* ACTION BUTTONS */
 
     .actions{
       display:flex;
@@ -165,16 +181,12 @@
       transform:scale(1.08);
     }
 
-    /* EMPTY STATE */
-
     .empty-state{
       text-align:center;
       padding:40px;
       color:#6b7280;
       font-size:18px;
     }
-
-    /* FOOTER */
 
     footer{
       background:#1E3A8A;
@@ -183,8 +195,6 @@
       padding:18px;
       margin-top:auto;
     }
-
-    /* RESPONSIVE */
 
     @media(max-width:900px){
 
@@ -210,8 +220,6 @@
 
 <body>
 
-  <!-- NAVBAR -->
-
   <nav>
 
     <div class="logo">NyondoStock</div>
@@ -226,14 +234,23 @@
 
   </nav>
 
-  <!-- HEADER -->
-
   <div class="page-header">
-    <h2>Sales Records</h2>
-    <p>Track and manage all sales transactions in NyondoStock.</p>
-  </div>
 
-  <!-- TABLE -->
+    <div class="header-top">
+
+      <div>
+        <h2>Sales Records</h2>
+        <p>Track and manage all sales transactions in NyondoStock.</p>
+      </div>
+
+      <a href="{% url 'sales' %}" class="add-sale-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Sale
+      </a>
+
+    </div>
+
+  </div>
 
   <div class="table-section">
 
@@ -242,7 +259,6 @@
       <table>
 
         <thead>
-
           <tr>
             <th>Item</th>
             <th>Quantity</th>
@@ -256,7 +272,6 @@
             <th>Contact</th>
             <th>Actions</th>
           </tr>
-
         </thead>
 
         <tbody>
@@ -266,15 +281,10 @@
           <tr>
 
             <td>{{ sale.name }}</td>
-
             <td>{{ sale.quantity }}</td>
-
             <td>UGX {{ sale.unit_price }}</td>
-
             <td>{{ sale.date }}</td>
-
             <td>UGX {{ sale.total_price }}</td>
-
             <td>{{ sale.distance }} KM</td>
 
             {% if sale.transport_fee == 0 %}
@@ -283,23 +293,21 @@
               <td class="paid">UGX {{ sale.transport_fee }}</td>
             {% endif %}
 
-            <td>
-              <strong>UGX {{ sale.grand_total }}</strong>
-            </td>
-
+            <td><strong>UGX {{ sale.grand_total }}</strong></td>
             <td>{{ sale.customer_name }}</td>
-
             <td>{{ sale.customer_contact }}</td>
 
             <td>
-
               <div class="actions">
 
                 <a href="{% url 'edit_sale' sale.id %}" class="btn edit-btn">
                   <i class="fa fa-edit"></i>
                 </a>
 
-                <a href="{% url 'delete_sale' sale.id %}" class="btn delete-btn">
+                <!-- DELETE CONFIRMATION ADDED HERE -->
+                <a href="{% url 'delete_sale' sale.id %}"
+                   class="btn delete-btn"
+                   onclick="return confirm('Are you sure you want to delete this sale record?')">
                   <i class="fa fa-trash"></i>
                 </a>
 
@@ -308,7 +316,6 @@
                 </a>
 
               </div>
-
             </td>
 
           </tr>
@@ -332,8 +339,6 @@
     </div>
 
   </div>
-
-  <!-- FOOTER -->
 
   <footer>
     &copy; 2026 NyondoStock Hardware Inventory System

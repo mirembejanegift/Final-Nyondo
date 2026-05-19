@@ -43,5 +43,4 @@ urlpatterns = [
     path('delete_supplier/<int:id>/', views.delete_supplier, name='delete_supplier'),
     path('supplier_receipt/<int:id>/', views.supplier_receipt, name='supplier_receipt'),
     path('reports/', views.reports, name='reports'),
-
 ]

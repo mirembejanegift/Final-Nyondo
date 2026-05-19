@@ -23,7 +23,6 @@
       flex-direction: column;
     }
 
-    /* NAVIGATION */
     nav {
       background: #1e3a8a;
       padding: 1rem 2rem;
@@ -60,7 +59,6 @@
       margin-right: 0.4rem;
     }
 
-    /* MAIN CONTENT */
     .main-content {
       flex: 1;
       padding: 2rem;
@@ -85,14 +83,8 @@
       border-radius: 0.5rem;
       text-decoration: none;
       font-weight: bold;
-      transition: 0.3s;
     }
 
-    .add-btn:hover {
-      background: #15803d;
-    }
-
-    /* TABLE CONTAINER */
     .table-container {
       background: white;
       border-radius: 1rem;
@@ -111,27 +103,15 @@
       color: white;
     }
 
-    th {
-      padding: 1rem;
-      text-align: left;
-      font-size: 0.95rem;
-    }
-
-    td {
+    th, td {
       padding: 1rem;
       border-bottom: 1px solid #e5e7eb;
-      font-size: 0.95rem;
-    }
-
-    tbody tr {
-      transition: 0.2s;
     }
 
     tbody tr:hover {
       background: #f9fafb;
     }
 
-    /* ACTION BUTTONS */
     .actions {
       display: flex;
       gap: 0.6rem;
@@ -146,11 +126,6 @@
       justify-content: center;
       text-decoration: none;
       color: white;
-      transition: 0.3s;
-    }
-
-    .icon-btn:hover {
-      transform: scale(1.08);
     }
 
     .edit-btn {
@@ -161,7 +136,6 @@
       background: #dc2626;
     }
 
-    /* STOCK BADGE */
     .stock-badge {
       background: #dbeafe;
       color: #1d4ed8;
@@ -171,7 +145,6 @@
       font-weight: bold;
     }
 
-    /* FOOTER */
     footer {
       background: #1e3a8a;
       color: white;
@@ -179,161 +152,96 @@
       padding: 1rem;
       margin-top: auto;
     }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-
-      nav {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .page-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-      }
-
-      .page-header h1 {
-        font-size: 1.5rem;
-      }
-    }
-
   </style>
 </head>
 
 <body>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <div class="logo">NyondoStock</div>
+<nav>
+  <div class="logo">NyondoStock</div>
 
-    <ul>
-      <li>
-        <a href="{% url 'index' %}">
-          <i class="fa-solid fa-house"></i>Home
-        </a>
-      </li>
+  <ul>
+    <li><a href="{% url 'index' %}"><i class="fa-solid fa-house"></i>Home</a></li>
+    <li><a href="{% url 'stock' %}"><i class="fa-solid fa-boxes-stacked"></i>Stock</a></li>
+    <li><a href="{% url 'add' %}"><i class="fa-solid fa-eye"></i>Stock View</a></li>
+    <li><a href="{% url 'supplier' %}"><i class="fa-solid fa-truck"></i>Supplier</a></li>
+    <li><a href="{% url 'supplier_view' %}"><i class="fa-solid fa-warehouse"></i>Supplier View</a></li>
+  </ul>
+</nav>
 
-      <li>
-        <a href="{% url 'stock' %}">
-          <i class="fa-solid fa-boxes-stacked"></i>Stock
-        </a>
-      </li>
+<div class="main-content">
 
-      <li>
-        <a href="{% url 'add' %}">
-          <i class="fa-solid fa-eye"></i>Stock View
-        </a>
-      </li>
+  <div class="page-header">
+    <h1>Stock Inventory</h1>
+    <a href="{% url 'stock' %}" class="add-btn">
+      <i class="fa-solid fa-plus"></i> Add Stock
+    </a>
+  </div>
 
-      <li>
-        <a href="{% url 'supplier' %}">
-          <i class="fa-solid fa-truck"></i>Supplier
-        </a>
-      </li>
+  <div class="table-container">
 
-      <li>
-        <a href="{% url 'supplier_view' %}">
-          <i class="fa-solid fa-warehouse"></i>Supplier View
-        </a>
-      </li>
-    </ul>
-  </nav>
+    <table>
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Cost Price</th>
+          <th>Selling Price</th>
+          <th>Date</th>
+          <th>Specifications</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-  <!-- MAIN CONTENT -->
-  <div class="main-content">
+      <tbody>
+        {% for stock in stocks %}
+        <tr>
+          <td>{{ stock.name }}</td>
+          <td>{{ stock.category }}</td>
 
-    <div class="page-header">
-      <h1>Stock Inventory</h1>
+          <td>
+            <span class="stock-badge">
+              {{ stock.quantity }} Units
+            </span>
+          </td>
 
-      <a href="{% url 'stock' %}" class="add-btn">
-        <i class="fa-solid fa-plus"></i> Add Stock
-      </a>
-    </div>
+          <td>UGX {{ stock.cost_price }}</td>
+          <td>UGX {{ stock.selling_price }}</td>
+          <td>{{ stock.date }}</td>
+          <td>{{ stock.specifications }}</td>
 
-    <div class="table-container">
+          <td>
+            <div class="actions">
 
-      <table>
+              <a class="icon-btn edit-btn"
+                 href="{% url 'edit_stock' stock.id %}">
+                <i class="fa-regular fa-pen-to-square"></i>
+              </a>
 
-        <thead>
-          <tr>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>Quantity</th>
-            <th>Cost Price</th>
-            <th>Selling Price</th>
-            <th>Date</th>
-            <th>Specifications</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+               <!-- DELETE WITH CONFIRMATION  -->
+              <a class="icon-btn delete-btn"
+                 href="{% url 'delete_stock' stock.id %}"
+                 onclick="return confirm('Are you sure you want to delete this stock item?')">
+                <i class="fa-solid fa-trash"></i>
+              </a>
 
-        <tbody>
+            </div>
+          </td>
 
-          {% for stock in stocks %}
+        </tr>
+        {% endfor %}
+      </tbody>
 
-          <tr>
-
-            <td>{{ stock.name }}</td>
-
-            <td>{{ stock.category }}</td>
-
-            <td>
-              <span class="stock-badge">
-                {{ stock.quantity }} Units
-              </span>
-            </td>
-
-            <td>UGX {{ stock.cost_price }}</td>
-
-            <td>UGX {{ stock.selling_price }}</td>
-
-            <td>{{ stock.date }}</td>
-
-            <td>{{ stock.specifications }}</td>
-
-            <td>
-              <div class="actions">
-
-                <a class="icon-btn edit-btn"
-                   href="{% url 'edit_stock' stock.id %}"
-                   title="Edit Stock">
-
-                  <i class="fa-regular fa-pen-to-square"></i>
-                </a>
-
-                <a class="icon-btn delete-btn"
-                   href="{% url 'delete_stock' stock.id %}"
-                   title="Delete Stock">
-
-                  <i class="fa-solid fa-trash"></i>
-                </a>
-
-              </div>
-            </td>
-
-          </tr>
-
-          {% endfor %}
-
-        </tbody>
-
-      </table>
-
-    </div>
+    </table>
 
   </div>
 
-  <!-- FOOTER -->
-  <footer>
-    &copy; 2026 NyondoStock Hardware Inventory System
-  </footer>
+</div>
+
+<footer>
+  &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
 
 </body>
 </html>

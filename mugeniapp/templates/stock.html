@@ -142,7 +142,7 @@
 
         <div class="container-fluid">
 
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'index' %}">
                 NyondoStock
             </a>
 
@@ -235,9 +235,9 @@
                     </label>
 
                     <input type="text"
-                    name="product"
+                    name="name"
                     class="form-control"
-                    value="{{ stock.product }}"
+                    value="{{ stock.name }}"
                     required>
 
                 </div>

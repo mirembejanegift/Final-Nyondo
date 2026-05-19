@@ -1,10 +1,12 @@
 from pyexpat.errors import messages
+from turtle import distance
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from datetime import datetime, date, timedelta
 from .models import Stock
+from django.db import transaction
 from .models import Sales
 from .models import Customer
 from .models import Supplier
@@ -17,7 +19,7 @@ def index(request):
     return render(request, 'index.html')
 
 
-
+#
 def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -83,7 +85,7 @@ def stock(request):
     if request.method == 'POST':
         payload = request.POST
 
-        stock_name = payload.get('product')
+        stock_name = payload.get('name')
         stock_category = payload.get('category')
         stock_quantity = payload.get('quantity')
         stock_cost_price = payload.get('cost_price')
@@ -148,6 +150,8 @@ def stock(request):
         return redirect('/add/')
 
     return render(request, 'stock.html')
+
+
     
 
 def add(request):
@@ -171,7 +175,7 @@ def edit_stock(request, id):
 
 
     if request.method == 'POST':
-        stock.name = request.POST.get('product')
+        stock.name = request.POST.get('name')
         stock.category = request.POST.get('category')
         stock.quantity = request.POST.get('quantity')
         stock.cost_price = request.POST.get('cost_price')
@@ -190,21 +194,16 @@ def edit_stock(request, id):
 
 
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from datetime import datetime, timedelta
-
-from .models import Stock, Sales
 
 
+@transaction.atomic
 def sales(request):
 
     if request.method == 'POST':
 
         payload = request.POST
 
-
-        stock_id = payload.get('name')
+        stock_id = payload.get('stock_id')
         quantity = payload.get('quantity')
         unit_price = payload.get('unit_price')
         date_str = payload.get('date')
@@ -212,62 +211,36 @@ def sales(request):
         customer_contact = payload.get('customer_contact')
         distance = payload.get('distance')
 
-      
         if not all([stock_id, quantity, unit_price, date_str, customer_name, customer_contact, distance]):
             messages.error(request, "All fields are required.")
             return redirect('sales')
 
-        
-        if not customer_contact.isdigit() or len(customer_contact) != 10:
-            messages.error(request, "Customer contact must be exactly 10 digits.")
-            return redirect('sales')
-
-      
         try:
             quantity = int(quantity)
-            unit_price = float(unit_price)
+            unit_price = int(unit_price)
             distance = float(distance)
         except ValueError:
             messages.error(request, "Invalid numeric values entered.")
             return redirect('sales')
 
-        # Prevent nonsense input
-        if quantity <= 0:
-            messages.error(request, "Quantity must be greater than zero.")
-            return redirect('sales')
-
-   
-        try:
-            sales_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-        except ValueError:
-            messages.error(request, "Invalid date format.")
-            return redirect('sales')
-
-        today = datetime.today().date()
-        one_week_ago = today - timedelta(days=7)
-
-        if sales_date < one_week_ago or sales_date > today:
-            messages.error(request, "Date must be within the past week and not in the future.")
-            return redirect('sales')
-
         stock = get_object_or_404(Stock, id=stock_id)
 
-      
         if quantity > stock.quantity:
             messages.error(request, f"Only {stock.quantity} items available in stock.")
             return redirect('sales')
 
+        # calculate totals
         total_price = quantity * unit_price
 
-        # Transport logic
-        if total_price >= 500000 and distance <= 10:
+        if distance <= 10 and total_price >= 500000:
             transport_fee = 0
         else:
             transport_fee = 30000
 
-        grand_total = total_price + transport_fee
+        grand_total = total_price + transport_fee   #  YOU WERE MISSING THIS
 
-        new_sale = Sales.objects.create(
+        #  CREATE SALE FIRST
+        sale = Sales.objects.create(
             name=stock,
             quantity=quantity,
             unit_price=unit_price,
@@ -275,47 +248,23 @@ def sales(request):
             distance=distance,
             transport_fee=transport_fee,
             grand_total=grand_total,
-            date=sales_date,
+            date=date_str,
             customer_name=customer_name,
             customer_contact=customer_contact
         )
 
-      
+        #  THEN REDUCE STOCK SAFELY
         stock.quantity -= quantity
         stock.save()
 
         messages.success(request, "Sale recorded successfully.")
-
         return redirect('save')
 
-   
     stocks = Stock.objects.all()
-
     return render(request, 'sales.html', {'stocks': stocks})
 
 
 
-  
-def sales_receipt(request,id):
-
-    sale = get_object_or_404(Sales, id=id)
-    stocks = Stock.objects.all() 
-
-    if request.method == 'POST':
-        sale.name_id = request.POST.get('name')
-        sale.quantity = (request.POST.get('quantity'))
-        sale.unit_price = request.POST.get('unit_price')
-        sale.date = request.POST.get('date')
-        sale.customer_name = request.POST.get('customer_name')
-        sale.customer_contact = request.POST.get('customer_contact')
-
-        sale.save()
-        return redirect('save',)
-
-    return render(request, 'sales_receipt.html', {
-        'sale': sale,
-        'stocks': stocks  
-    })
 
 
 
@@ -325,10 +274,26 @@ def save(request):
     return render(request, 'save.html', {'sales': sales})
 
 
+
+
+
+def sales_receipt(request, id):
+    sale = get_object_or_404(Sales, id=id)
+    return render(request, 'sale_receipt.html', {'sale': sale})
+
+
+
+
+
+
+
 def delete_sale(request, id):
     sale = get_object_or_404(Sales, id=id)   # FIXED: use Sales model
     sale.delete()
     return redirect('save')
+
+
+
 
 
 def edit_sale(request, id):
@@ -351,6 +316,8 @@ def edit_sale(request, id):
         'sale': sale,
         'stocks': stocks
     })
+
+
 
 
 
@@ -409,9 +376,7 @@ def customer(request):
             messages.error(request, "Date cannot be older than 1 week.")
             return redirect("customer_list")
 
-        # ----------------------------
-        # SAVE DATA
-        # ----------------------------
+   
         Customer.objects.create(
             name=name,
             nin=nin,
@@ -430,10 +395,9 @@ def customer(request):
         "one_week_ago": one_week_ago
     })
 
-from datetime import datetime, timedelta
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Customer
+
+
+
 
 
 def customer_list(request):
@@ -532,6 +496,12 @@ def edit_customer(request, id):
 
 
 
+from datetime import datetime, timedelta
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Stock, Supplier
+
+
 def supplier(request):
 
     stocks = Stock.objects.all()
@@ -542,15 +512,22 @@ def supplier(request):
 
         stock_id = payload.get('stock')
         supplier_name = payload.get('supplier_name')
+        supplier_contact = payload.get('supplier_contact')
+
         quantity = payload.get('quantity')
         cost_price = payload.get('cost_price')
+
+        amount_paid = payload.get('amount_paid') or 0
+
         supplier_date_str = payload.get('date')
         method_of_payment = payload.get('method_of_payment')
 
-        
+        # REQUIRED FIELDS
+
         if not all([
             stock_id,
             supplier_name,
+            supplier_contact,
             quantity,
             cost_price,
             supplier_date_str,
@@ -559,31 +536,53 @@ def supplier(request):
             messages.error(request, "All fields are required.")
             return redirect('supplier')
 
+        # QUANTITY VALIDATION
+
         try:
             quantity = int(quantity)
+
         except ValueError:
             messages.error(request, "Quantity must be a valid number.")
             return redirect('supplier')
 
         if quantity <= 0:
-            messages.error(request, "Quantity cannot be negative or zero.")
+            messages.error(request, "Quantity must be greater than zero.")
             return redirect('supplier')
+
+        # COST PRICE VALIDATION
 
         try:
             cost_price = float(cost_price)
+
         except ValueError:
             messages.error(request, "Cost price must be a valid number.")
             return redirect('supplier')
 
         if cost_price <= 0:
-            messages.error(request, "Cost price cannot be negative or zero.")
+            messages.error(request, "Cost price must be greater than zero.")
             return redirect('supplier')
+
+        # AMOUNT PAID VALIDATION
+
+        try:
+            amount_paid = float(amount_paid)
+
+        except ValueError:
+            messages.error(request, "Amount paid must be a valid number.")
+            return redirect('supplier')
+
+        if amount_paid < 0:
+            messages.error(request, "Amount paid cannot be negative.")
+            return redirect('supplier')
+
+        # DATE VALIDATION
 
         try:
             supplier_date = datetime.strptime(
                 supplier_date_str,
                 "%Y-%m-%d"
             ).date()
+
         except ValueError:
             messages.error(request, "Invalid date format.")
             return redirect('supplier')
@@ -598,33 +597,69 @@ def supplier(request):
             )
             return redirect('supplier')
 
+        # GET STOCK
+
         try:
             stock = Stock.objects.get(id=stock_id)
+
         except Stock.DoesNotExist:
             messages.error(request, "Selected stock does not exist.")
             return redirect('supplier')
 
+        # CALCULATIONS
+
+        total_cost = quantity * cost_price
+
+        # IF CASH => FULLY PAID
+
+        if method_of_payment == 'cash':
+            amount_paid = total_cost
+            balance = 0
+
+        else:
+            balance = total_cost - amount_paid
+
+        # PREVENT OVERPAYMENT
+
+        if amount_paid > total_cost:
+            messages.error(
+                request,
+                "Amount paid cannot be greater than total cost."
+            )
+            return redirect('supplier')
+
+        # SAVE SUPPLIER
+
         new_supplier = Supplier(
             stock=stock,
             supplier_name=supplier_name,
+            supplier_contact=supplier_contact,
             quantity=quantity,
             cost_price=cost_price,
+            total_cost=total_cost,
+            amount_paid=amount_paid,
+            balance=balance,
             date=supplier_date,
             method_of_payment=method_of_payment
         )
 
         new_supplier.save()
 
+        # UPDATE STOCK
+
         stock.quantity += quantity
         stock.save()
 
-        messages.success(request, "Supplier record added successfully.")
+        messages.success(
+            request,
+            "Supplier record added successfully."
+        )
 
         return redirect('supplier_view')
 
-    return render(request, 'supplier.html', {'stocks': stocks})
-
-
+    return render(request, 'supplier.html', {
+        'stocks': stocks
+    })
 
 
 
@@ -639,7 +674,7 @@ def delete_supplier(request, id):
     supplier.delete()
     return redirect('supplier_view')
 
-from django.shortcuts import get_object_or_404
+
 
 def edit_supplier(request, id):
     supplier = get_object_or_404(Supplier, id=id)
