@@ -1,9 +1,11 @@
-from pyexpat.errors import messages
-from turtle import distance
+from os import name
+from urllib import request
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from datetime import datetime, date, timedelta
 from .models import Stock
 from django.db import transaction
@@ -12,14 +14,16 @@ from .models import Customer
 from .models import Supplier
 from django.db.models import Sum
 
+
 # # Create your views here.
-
-
+# THIS IS THE HOME PAGE VIEW
 def index(request):
     return render(request, 'index.html')
 
 
-#
+
+# THIS IS THE LOGIN VIEW. I USED DJANGO'S BUILT-IN AUTHENTICATION SYSTEM TO HANDLE USER LOGIN.
+# i used a supperuser check for admin role and group checks for sales and stock manager roles. 
 def login_view(request):
     if request.method == "POST":
         username = request.POST["username"]
@@ -30,7 +34,6 @@ def login_view(request):
         if user is not None:
             login(request, user)
 
-            # ROLE CHECK (THIS IS THE KEY PART)
             if user.is_superuser or user.groups.filter(name="admin").exists():
                 return redirect("dashboard")
 
@@ -43,25 +46,40 @@ def login_view(request):
             else:
                 return redirect("login")
 
+
     return render(request, "login.html")
 
 
 
-def dashboard(request):
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
+# THIS IS THE DASHBOARD VIEW. IT DISPLAYS KEY METRICS AND RECENT ACTIVITY TO GIVE THE ADMIN A QUICK OVERVIEW OF THE SYSTEM'S STATUS.
+
+@login_required
+def dashboard(request):
+    # this is calling upon the total number of products in stock, 
     total_products = Stock.objects.count()
 
+# this is calculating the total sales amount for the current day by summing up the total_price field of all sales made today.
     today_sales = Sales.objects.all()
     total_sales_amount = sum(sale.total_price for sale in today_sales)
 
+
+# this is displayin the number of customers on a credit scheme by counting the total number of customer records in the database.
     scheme_customers = Customer.objects.count()
 
+# this is fetching all supplier records to display a list of suppliers who have supplied stock on credit.
     credit_suppliers = Supplier.objects.all()
 
+# this is fetching the 5 most recent sales to display recent activity on the dashboard.
     recent_sales = Sales.objects.order_by('-id')[:5]
 
-    # ADD THIS (this is what your template needs)
-    low_stock_products = Stock.objects.filter(quantity__lte=5)
+# this is fetching all stock items that have a quantity of 5 or less to display low stock alerts on the dashboard. 
+    low_stock_products = Stock.objects.filter(quantity__lte=10)
+
+    
 
     context = {
         'total_products': total_products,
@@ -69,7 +87,6 @@ def dashboard(request):
         'scheme_customers': scheme_customers,
         'credit_suppliers': credit_suppliers,
         'recent_sales': recent_sales,
-
     
         'low_stock_products': low_stock_products,
     }
@@ -79,95 +96,94 @@ def dashboard(request):
 
 
 
+# THIS IS THE STOCK VIEW. IT HANDLES THE LOGIC FOR ADDING NEW STOCK ITEMS, INCLUDING VALIDATING INPUT AND SAVING STOCK RECORDS TO THE DATABASE.
 
 
+@login_required    
 def stock(request):
     if request.method == 'POST':
+
         payload = request.POST
 
         stock_name = payload.get('name')
         stock_category = payload.get('category')
         stock_quantity = payload.get('quantity')
+        stock_supplier = payload.get('supplier')
         stock_cost_price = payload.get('cost_price')
         stock_selling_price = payload.get('selling_price')
         stock_date_str = payload.get('date')
-        stock_specifications = payload.get('specifications')
+        stock_specifications = payload.get('specifications') 
+        
 
-   
+        
         try:
             stock_quantity = int(stock_quantity)
+            if stock_quantity <= 0:
+                return render(request, 'stock.html', {'error': 'Quantity must be greater than 0'})
         except (TypeError, ValueError):
-            return render(request, 'stock.html', {
-                'error': 'Quantity must be a valid number'
-            })
+            return render(request, 'stock.html', {'error': 'Quantity must be a valid number'})
 
-        if stock_quantity < 0:
-            return render(request, 'stock.html', {
-                'error': 'Quantity cannot be negative'
-            })
-
-    
         try:
             stock_cost_price = float(stock_cost_price)
             stock_selling_price = float(stock_selling_price)
+            if stock_cost_price <= 0 or stock_selling_price <= 0:
+                return render(request, 'stock.html', {'error': 'Prices must be greater than 0'})
         except (TypeError, ValueError):
-            return render(request, 'stock.html', {
-                'error': 'Prices must be valid numbers'
-            })
+            return render(request, 'stock.html', {'error': 'Prices must be valid numbers'})
 
-   
         try:
             stock_date = datetime.strptime(stock_date_str, "%Y-%m-%d").date()
         except ValueError:
-            return render(request, 'stock.html', {
-                'error': 'Invalid date format'
-            })
+            return render(request, 'stock.html', {'error': 'Invalid date format'})
 
         today = date.today()
         one_week_ago = today - timedelta(days=7)
 
         if stock_date > today:
-            return render(request, 'stock.html', {
-                'error': 'Date cannot be in the future'
-            })
-        elif stock_date < one_week_ago:
-            return render(request, 'stock.html', {
-                'error': 'Date cannot be older than 1 week'
-            })
+            return render(request, 'stock.html', {'error': 'Date cannot be in the future'})
+        if stock_date < one_week_ago:
+            return render(request, 'stock.html', {'error': 'Date cannot be older than 1 week'})
+
+    
+        stock_name = stock_name.strip().title()
 
    
-        new_stock = Stock(
+        stock_obj, created = Stock.objects.get_or_create(
             name=stock_name,
-            category=stock_category,
-            quantity=stock_quantity,
-            cost_price=stock_cost_price,
-            selling_price=stock_selling_price,
-            date=stock_date,
-            specifications=stock_specifications
+            defaults={
+                'category': stock_category,
+                'quantity': 0,
+                'cost_price': stock_cost_price,
+                'selling_price': stock_selling_price,
+                'date': stock_date,
+                'specifications': stock_specifications
+            }
         )
-        new_stock.save()
+
+        stock_obj.quantity = (stock_obj.quantity or 0) + stock_quantity
+        stock_obj.save()
 
         return redirect('/add/')
 
     return render(request, 'stock.html')
 
 
-    
 
+@login_required
 def add(request):
     stocks = Stock.objects.all()
 
     return render(request, 'add.html', {'stocks': stocks})
 
 
-
+@login_required
 def delete_stock(request, id):
     stock = get_object_or_404(Stock, id=id)
     stock.delete()
     return redirect('add')
 
 
-
+@login_required
 def edit_stock(request, id):
     stock = get_object_or_404(Stock, id=id)
     stocks = Stock.objects.all()
@@ -191,12 +207,9 @@ def edit_stock(request, id):
     })
     
 
-
-
-
-
-
-@transaction.atomic
+# THIS IS THE SALES VIEW. IT HANDLES THE LOGIC FOR RECORDING SALES, INCLUDING VALIDATING INPUT, CALCULATING TOTALS, AND UPDATING STOCK QUANTITIES.
+@login_required
+@transaction.atomic  # THIS ENSURES THAT ALL DATABASE OPERATIONS WITHIN THIS VIEW ARE ATOMIC, MEANING THEY WILL EITHER ALL SUCCEED OR ALL FAIL TO MAINTAIN DATA INTEGRITY.
 def sales(request):
 
     if request.method == 'POST':
@@ -211,6 +224,7 @@ def sales(request):
         customer_contact = payload.get('customer_contact')
         distance = payload.get('distance')
 
+# VALIDATION: CHECK IF ALL REQUIRED FIELDS ARE PRESENT
         if not all([stock_id, quantity, unit_price, date_str, customer_name, customer_contact, distance]):
             messages.error(request, "All fields are required.")
             return redirect('sales')
@@ -224,6 +238,7 @@ def sales(request):
             return redirect('sales')
 
         stock = get_object_or_404(Stock, id=stock_id)
+    
 
         if quantity > stock.quantity:
             messages.error(request, f"Only {stock.quantity} items available in stock.")
@@ -232,7 +247,7 @@ def sales(request):
         # calculate totals
         total_price = quantity * unit_price
 
-        if distance <= 10 and total_price >= 500000:
+        if distance <= 10 and total_price <= 500000:
             transport_fee = 0
         else:
             transport_fee = 30000
@@ -241,7 +256,7 @@ def sales(request):
 
         #  CREATE SALE FIRST
         sale = Sales.objects.create(
-            name=stock,
+            s_name=stock.name,
             quantity=quantity,
             unit_price=unit_price,
             total_price=total_price,
@@ -267,7 +282,7 @@ def sales(request):
 
 
 
-
+@login_required
 def save(request):
     sales = Sales.objects.all()
 
@@ -275,54 +290,58 @@ def save(request):
 
 
 
-
-
+@login_required
 def sales_receipt(request, id):
     sale = get_object_or_404(Sales, id=id)
-    return render(request, 'sale_receipt.html', {'sale': sale})
+    return render(request, 'sales_receipt.html', {'sale': sale})
 
 
 
 
-
-
-
+@login_required
 def delete_sale(request, id):
-    sale = get_object_or_404(Sales, id=id)   # FIXED: use Sales model
-    sale.delete()
+    if request.user.is_superuser:
+        sale = get_object_or_404(Sales, id=id)   # FIXED: use Sales model
+        sale.delete()
     return redirect('save')
 
 
-
-
-
+@login_required
 def edit_sale(request, id):
-    sale = get_object_or_404(Sales, id=id)
-    stocks = Stock.objects.all()
+    sale = get_object_or_404(Sales, id=id)  # FIXED: use Sales model
+  
 
     if request.method == 'POST':
-        sale.name_id = request.POST.get('name')
+        stock = get_object_or_404(Stock, name=sale.name)
         sale.quantity = int(request.POST.get('quantity'))
         sale.unit_price = int(request.POST.get('unit_price'))
         sale.date = request.POST.get('date')
         sale.customer_name = request.POST.get('customer_name')
         sale.customer_contact = request.POST.get('customer_contact')
+        sale.distance = float(request.POST.get('distance'))
+
+        # recalculate totals
+        sale.total_price = sale.quantity * sale.unit_price
+
+        if sale.distance <= 10 and sale.total_price <= 500000:
+            sale.transport_fee = 0
+        else:
+            sale.transport_fee = 30000
+
+        sale.grand_total = sale.total_price + sale.transport_fee
 
         sale.save()
-
-        return redirect('save')  
+        return redirect('save')
 
     return render(request, 'edit_sale.html', {
         'sale': sale,
-        'stocks': stocks
+        'stock': stock
     })
 
 
 
-
-
-
-
+# THIS IS THE CUSTOMER VIEW. IT HANDLES THE LOGIC FOR ADDING CUSTOMERS, INCLUDING VALIDATING INPUT AND SAVING CUSTOMER RECORDS TO THE DATABASE.
+@login_required
 def customer(request):
 
     today = datetime.today().date()
@@ -338,56 +357,74 @@ def customer(request):
         amount = request.POST.get("amount")
         date = request.POST.get("date")
 
+        # CHECK EMPTY FIELDS
         if not all([name, nin, email, contact, product, amount, date]):
             messages.error(request, "All fields are required.")
-            return redirect("customer_list")
+            return redirect("customer")
 
-   
+        # VALIDATE AMOUNT
         try:
             amount = float(amount)
         except ValueError:
             messages.error(request, "Amount must be a valid number.")
-            return redirect("customer_list")
+            return redirect("customer")
 
         if amount <= 0:
-            messages.error(request, "Amount must be greater than zero (no negatives allowed).")
-            return redirect("customer_list")
+            messages.error(request, "Amount must be greater than zero.")
+            return redirect("customer")
 
+        # VALIDATE CONTACT
         if not contact.isdigit():
             messages.error(request, "Contact must contain only numbers.")
-            return redirect("customer_list")
+            return redirect("customer")
 
         if len(contact) != 10:
             messages.error(request, "Contact must be exactly 10 digits.")
-            return redirect("customer_list")
+            return redirect("customer")
 
-    
+        # VALIDATE DATE
         try:
             date_value = datetime.strptime(date, "%Y-%m-%d").date()
         except ValueError:
             messages.error(request, "Invalid date format.")
-            return redirect("customer_list")
+            return redirect("customer")
 
         if date_value > today:
             messages.error(request, "Date cannot be in the future.")
-            return redirect("customer_list")
+            return redirect("customer")
 
         if date_value < one_week_ago:
             messages.error(request, "Date cannot be older than 1 week.")
-            return redirect("customer_list")
+            return redirect("customer")
 
-   
-        Customer.objects.create(
-            name=name,
+        # CHECK IF CUSTOMER ALREADY EXISTS
+        customer, created = Customer.objects.get_or_create(
             nin=nin,
-            email=email,
-            contact=contact,
-            product=product,
-            amount=amount,
-            date=date_value
+            defaults={
+                'name': name,
+                'email': email,
+                'contact': contact,
+                'product': product,
+                'amount': amount,
+                'date': date_value
+            }
         )
 
-        messages.success(request, "Customer saved successfully.")
+        # IF CUSTOMER EXISTS, ADD NEW DEPOSIT
+        if not created:
+            customer.amount += amount
+            customer.name = name
+            customer.email = email
+            customer.contact = contact
+            customer.product = product
+            customer.date = date_value
+            customer.save()
+
+            messages.success(request, "Deposit added successfully.")
+
+        else:
+            messages.success(request, "Customer saved successfully.")
+
         return redirect("customer_list")
 
     return render(request, "customer.html", {
@@ -396,10 +433,22 @@ def customer(request):
     })
 
 
+# CUSTOMER LIST VIEW
+# Displays all customers
+@login_required
+def customer_list(request):
+
+    customers = Customer.objects.all().order_by('-id')
+
+    return render(request, "customer_list.html", {
+        "customers": customers
+    })
 
 
 
+# THIS IS THE CUSTOMER LIST VIEW. IT DISPLAYS A LIST OF ALL CUSTOMERS IN THE DATABASE AND PROVIDES OPTIONS TO EDIT OR DELETE CUSTOMER RECORDS.
 
+@login_required
 def customer_list(request):
     if request.method == 'POST':
         payload = request.POST
@@ -451,19 +500,20 @@ def customer_list(request):
 
 
 
-
+@login_required
 def customer_receipt(request, id):
     customer = get_object_or_404(Customer, id=id)
     return render(request, 'customer_receipt.html', {'customer': customer})
 
 
 
+@login_required
 def customer(request):
     customers = Customer.objects.all()
     return render(request, 'customer.html', {'customers': customers})
 
 
-
+@login_required
 def delete_customer(request, id):
     customer = Customer.objects.get(id=id)
     customer.delete()
@@ -471,7 +521,7 @@ def delete_customer(request, id):
 
 
 
-
+@login_required
 def edit_customer(request, id):
     customer = get_object_or_404(Customer, id=id)
     customers = Customer.objects.all()
@@ -485,7 +535,22 @@ def edit_customer(request, id):
         customer.amount = request.POST.get('amount')
         customer.date = request.POST.get('date')
         customer.save()
-        return redirect('customer')
+
+
+
+        if len( customer.nin) != 14:
+         messages.error(request, "NIN must be exactly 14 characters.")
+   
+        else:
+            messages.success(request, "Customer updated successfully.")
+
+        if customer.contact :
+            if not customer.contact.isdigit():
+                messages.error(request, "Contact must contain only numbers.")
+            elif len(customer.contact) != 10:
+                messages.error(request, "Contact must be exactly 10 digits.")
+            else:
+                messages.success(request, "Customer updated successfully.")
 
     return render(request, 'edit_customer_list.html', {
         'customer': customer,
@@ -493,24 +558,19 @@ def edit_customer(request, id):
     })
 
 
-
-
-
-from datetime import datetime, timedelta
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from .models import Stock, Supplier
-
-
+# THIS IS THE SUPPLIER VIEW. IT HANDLES THE LOGIC FOR ADDING SUPPLIERS, INCLUDING VALIDATING INPUT AND SAVING SUPPLIER RECORDS TO THE DATABASE.
+@login_required
 def supplier(request):
 
-    stocks = Stock.objects.all()
+    if not request.user.is_superuser:
+        messages.error(request, "Access denied.")
+        return redirect('index')
 
     if request.method == 'POST':
 
         payload = request.POST
 
-        stock_id = payload.get('stock')
+        product_name = payload.get('product_name')
         supplier_name = payload.get('supplier_name')
         supplier_contact = payload.get('supplier_contact')
 
@@ -518,120 +578,48 @@ def supplier(request):
         cost_price = payload.get('cost_price')
 
         amount_paid = payload.get('amount_paid') or 0
-
         supplier_date_str = payload.get('date')
         method_of_payment = payload.get('method_of_payment')
 
-        # REQUIRED FIELDS
-
-        if not all([
-            stock_id,
-            supplier_name,
-            supplier_contact,
-            quantity,
-            cost_price,
-            supplier_date_str,
-            method_of_payment
-        ]):
+        # VALIDATION
+        if not all([product_name, supplier_name, quantity, cost_price, supplier_date_str, method_of_payment]):
             messages.error(request, "All fields are required.")
             return redirect('supplier')
 
-        # QUANTITY VALIDATION
-
         try:
             quantity = int(quantity)
-
-        except ValueError:
-            messages.error(request, "Quantity must be a valid number.")
-            return redirect('supplier')
-
-        if quantity <= 0:
-            messages.error(request, "Quantity must be greater than zero.")
-            return redirect('supplier')
-
-        # COST PRICE VALIDATION
-
-        try:
             cost_price = float(cost_price)
-
-        except ValueError:
-            messages.error(request, "Cost price must be a valid number.")
-            return redirect('supplier')
-
-        if cost_price <= 0:
-            messages.error(request, "Cost price must be greater than zero.")
-            return redirect('supplier')
-
-        # AMOUNT PAID VALIDATION
-
-        try:
             amount_paid = float(amount_paid)
-
         except ValueError:
-            messages.error(request, "Amount paid must be a valid number.")
+            messages.error(request, "Invalid number input.")
             return redirect('supplier')
 
-        if amount_paid < 0:
-            messages.error(request, "Amount paid cannot be negative.")
+        if quantity <= 0 or cost_price <= 0:
+            messages.error(request, "Quantity and cost price must be greater than 0.")
             return redirect('supplier')
 
-        # DATE VALIDATION
-
+        # DATE
         try:
-            supplier_date = datetime.strptime(
-                supplier_date_str,
-                "%Y-%m-%d"
-            ).date()
-
+            supplier_date = datetime.strptime(supplier_date_str, "%Y-%m-%d").date()
         except ValueError:
-            messages.error(request, "Invalid date format.")
+            messages.error(request, "Invalid date.")
             return redirect('supplier')
-
-        today = datetime.today().date()
-        one_week_ago = today - timedelta(days=7)
-
-        if supplier_date < one_week_ago or supplier_date > today:
-            messages.error(
-                request,
-                "Date must be within the past week and not in the future."
-            )
-            return redirect('supplier')
-
-        # GET STOCK
-
-        try:
-            stock = Stock.objects.get(id=stock_id)
-
-        except Stock.DoesNotExist:
-            messages.error(request, "Selected stock does not exist.")
-            return redirect('supplier')
-
-        # CALCULATIONS
 
         total_cost = quantity * cost_price
-
-        # IF CASH => FULLY PAID
 
         if method_of_payment == 'cash':
             amount_paid = total_cost
             balance = 0
-
         else:
             balance = total_cost - amount_paid
 
-        # PREVENT OVERPAYMENT
-
         if amount_paid > total_cost:
-            messages.error(
-                request,
-                "Amount paid cannot be greater than total cost."
-            )
+            messages.error(request, "Overpayment is not allowed.")
             return redirect('supplier')
 
         # SAVE SUPPLIER
-
-        new_supplier = Supplier(
-            stock=stock,
+        Supplier.objects.create(
+            product_name=product_name,
             supplier_name=supplier_name,
             supplier_contact=supplier_contact,
             quantity=quantity,
@@ -643,47 +631,45 @@ def supplier(request):
             method_of_payment=method_of_payment
         )
 
-        new_supplier.save()
-
-        # UPDATE STOCK
-
-        stock.quantity += quantity
-        stock.save()
-
-        messages.success(
-            request,
-            "Supplier record added successfully."
+      
+        stock, created = Stock.objects.get_or_create(
+            name=name,
+            defaults={
+                "quantity": 0,
+                "cost_price": cost_price,
+                "selling_price": 0,
+                "date": supplier_date
+            }
         )
 
+        stock.quantity += quantity
+        stock.cost_price = cost_price
+        stock.save()
+
+        messages.success(request, "Supplier added and stock updated successfully.")
         return redirect('supplier_view')
 
-    return render(request, 'supplier.html', {
-        'stocks': stocks
-    })
+    return render(request, 'supplier.html')
 
-
-
-
-
+@login_required
 def supplier_view(request):
     supplies = Supplier.objects.all()
     return render(request, 'supplier_view.html', {'supplies': supplies})
 
+@login_required
 def delete_supplier(request, id):
     supplier = get_object_or_404(Supplier, id=id)
     supplier.delete()
     return redirect('supplier_view')
 
 
-
+@login_required
 def edit_supplier(request, id):
     supplier = get_object_or_404(Supplier, id=id)
-    stocks = Stock.objects.all()
+  
 
     if request.method == 'POST':
-        stock_id = request.POST.get('stock')
-        supplier.stock = get_object_or_404(Stock, id=stock_id)  # FIXED
-
+        supplier.product_name = request.POST.get('product_name')
         supplier.supplier_name = request.POST.get('supplier_name')
         supplier.quantity = int(request.POST.get('quantity'))
         supplier.cost_price = float(request.POST.get('cost_price'))
@@ -696,10 +682,10 @@ def edit_supplier(request, id):
 
     return render(request, 'edit_supplier.html', {
         'supplier': supplier,
-        'stocks': stocks
+      
     })
 
-
+@login_required
 def supplier_receipt(request, id):
     supplier = get_object_or_404(Supplier, id=id)
 
@@ -714,11 +700,12 @@ def supplier_receipt(request, id):
         "total_cost": total_cost,
         "balance": balance,
     }
+    return render(request, "supplier_receipt.html", context) 
 
-    return render(request, "supplier_receipt.html", context)  
+
+@login_required
 def reports(request):
 
-    # STOCK SUMMARY
     total_stock_items = Stock.objects.count()
     total_stock_quantity = Stock.objects.aggregate(
         total=Sum('quantity')
@@ -727,7 +714,6 @@ def reports(request):
     low_stock_items = Stock.objects.filter(quantity__lt=5)
     out_of_stock = Stock.objects.filter(quantity=0)
 
-    # CUSTOMER SUMMARY
     total_customers = Customer.objects.count()
     total_sales = Customer.objects.aggregate(
         total=Sum('amount')

@@ -182,6 +182,10 @@
 
         <h3>NyondoStock</h3>
 
+        <a href="{% url 'index' %}">
+            <i class="bi bi-house-door"></i> Home
+        </a>
+
         <a href="{% url 'dashboard' %}">
             <i class="bi bi-speedometer2"></i> Dashboard
         </a>
@@ -202,7 +206,12 @@
             <i class="bi bi-truck"></i> Suppliers
         </a>
 
-        <a href="{% url 'login' %}">
+
+        <a href="{% url 'reports' %}">
+            <i class="bi bi-graph-up"></i> Reports
+        </a>
+
+        <a href="{% url 'logout' %}">
             <i class="bi bi-box-arrow-right"></i> Logout
         </a>
 
@@ -365,7 +374,7 @@
 
             <tr>
                 <td>{{ supplier.supplier_name }}</td>
-                <td>{{ supplier.stock.name }}</td>
+                <td>{{ supplier.product_name }}</td>
                 <td>{{ supplier.quantity }}</td>
                 <td>UGX {{ supplier.amount_paid }}</td>
                 <td>UGX {{ supplier.balance }}</td>

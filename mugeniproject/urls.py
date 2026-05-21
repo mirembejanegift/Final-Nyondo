@@ -21,6 +21,8 @@ from mugeniapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path('stock/', views.stock, name='stock'),
     path('delete-stock/<int:id>/', views.delete_stock, name='delete_stock'),
      path('edit_stock/<int:id>/', views.edit_stock, name='edit_stock'),
@@ -30,7 +32,7 @@ urlpatterns = [
     path('delete-sale/<int:id>/', views.delete_sale, name='delete_sale'),
     path('sales_receipt/<int:id>/', views.sales_receipt, name='sales_receipt'),
    path('dashboard/', views.dashboard, name='dashboard'),
-    path('login/', views.login_view, name='login'),                                                                                
+                                                                                    
     path('edit_sale/<int:id>/', views.edit_sale, name='edit_sale'),
     path('customer/', views.customer, name='customer'),
     path('customer_list/', views.customer_list, name='customer_list'),

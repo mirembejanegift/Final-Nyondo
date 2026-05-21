@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-
-        body{
+        body {
             background: #f1f5f9;
             font-family: 'Segoe UI', sans-serif;
             color: #334155;
@@ -22,61 +21,61 @@
 
         /* NAVBAR */
 
-        .navbar{
-            background:#1E3A8A ;
+        .navbar {
+            background: #1E3A8A;
             padding: 15px 40px;
         }
 
-        .navbar-brand{
+        .navbar-brand {
             color: white;
             font-size: 24px;
             font-weight: bold;
         }
 
-        .navbar-brand:hover{
+        .navbar-brand:hover {
             color: white;
         }
 
-        .nav-link{
+        .nav-link {
             color: #cbd5e1 !important;
             margin-left: 15px;
             transition: 0.3s;
         }
 
-        .nav-link:hover{
+        .nav-link:hover {
             color: white !important;
         }
 
         /* PAGE TITLE */
 
-        .page-title{
+        .page-title {
             text-align: center;
             margin-top: 40px;
             margin-bottom: 30px;
         }
 
-        .page-title h1{
+        .page-title h1 {
             font-weight: bold;
             color: #0f172a;
         }
 
-        .page-title p{
+        .page-title p {
             color: gray;
         }
 
         /* FORM CARD */
 
-        .form-container{
+        .form-container {
             max-width: 750px;
             margin: auto;
             background: white;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
             margin-bottom: 50px;
         }
 
-        .section-title{
+        .section-title {
             font-size: 18px;
             font-weight: bold;
             margin-bottom: 20px;
@@ -85,27 +84,27 @@
 
         /* FORM */
 
-        .form-label{
+        .form-label {
             font-weight: 600;
             margin-bottom: 8px;
         }
 
         .form-control,
-        .form-select{
+        .form-select {
             padding: 12px;
             border-radius: 10px;
             border: 1px solid #cbd5e1;
         }
 
         .form-control:focus,
-        .form-select:focus{
+        .form-select:focus {
             border-color: #2563eb;
-            box-shadow: 0 0 0 0.15rem rgba(37,99,235,0.25);
+            box-shadow: 0 0 0 0.15rem rgba(37, 99, 235, 0.25);
         }
 
         /* BUTTON */
 
-        .submit-btn{
+        .submit-btn {
             background: #2563eb;
             color: white;
             border: none;
@@ -117,23 +116,23 @@
             transition: 0.3s;
         }
 
-        .submit-btn:hover{
+        .submit-btn:hover {
             background: #1d4ed8;
         }
 
         /* FOOTER */
 
-        footer{
-            background: #1E3A8A ;
+        footer {
+            background: #1E3A8A;
             color: white;
             text-align: center;
             padding: 18px;
             margin-top: 30px;
         }
-
     </style>
 
 </head>
+
 <body>
 
     <!-- NAVBAR -->
@@ -146,55 +145,51 @@
                 NyondoStock
             </a>
 
-            <button class="navbar-toggler bg-light"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
 
                 <span class="navbar-toggler-icon"></span>
 
             </button>
 
-            <div class="collapse navbar-collapse"
-            id="navbarNav">
+            <div class="collapse navbar-collapse" id="navbarNav">
 
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'index' %}">
-                        <i class="bi bi-house"></i> Home
+                        <a class="nav-link" href="{% url 'index' %}">
+                            <i class="bi bi-house"></i> Home
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'add' %}">
-                        <i class="bi bi-eye"></i> Stock View
+                        <a class="nav-link" href="{% url 'add' %}">
+                            <i class="bi bi-eye"></i> Stock View
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'stock' %}">
-                        <i class="bi bi-box-seam"></i> Stock
+                        <a class="nav-link" href="{% url 'stock' %}">
+                            <i class="bi bi-box-seam"></i> Stock
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'supplier' %}">
-                        <i class="bi bi-truck"></i> Supplier
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'supplier_view' %}">
-                        <i class="bi bi-people"></i> Supplier View
-                        </a>
-                    </li>
-
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'supplier' %}"><i
+                                    class="fa-solid fa-truck"></i>Supplier</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'supplier_view' %}"><i
+                                    class="fa-solid fa-warehouse"></i>Supplier View</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'sales' %}"><i
+                                    class="fa-solid fa-cart-shopping"></i>Sales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'save' %}"><i
+                                    class="fa-solid fa-table-list"></i>Saved Sales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'customer' %}"><i
+                                    class="fa-solid fa-people-group"></i> Customers view</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'customer_list' %}"><i
+                                    class="fa-solid fa-users"></i>Customer </a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i
+                                    class="fa-solid fa-chart-bar"></i> Reports</a></li>
+                    {% endif %}
                 </ul>
 
             </div>
@@ -221,8 +216,7 @@
             Product Information
         </div>
 
-        <form method="post"
-        action="{% url 'stock' %}">
+        <form method="post" action="{% url 'stock' %}">
 
             {% csrf_token %}
 
@@ -234,11 +228,7 @@
                         Product Name
                     </label>
 
-                    <input type="text"
-                    name="name"
-                    class="form-control"
-                    value="{{ stock.name }}"
-                    required>
+                    <input type="text" name="name" class="form-control" value="{{ stock.name }}" required>
 
                 </div>
 
@@ -248,9 +238,7 @@
                         Category
                     </label>
 
-                    <select name="category"
-                    class="form-select"
-                    required>
+                    <select name="category" class="form-select" required>
 
                         <option value="">
                             Select Category
@@ -286,10 +274,17 @@
                         Quantity
                     </label>
 
-                    <input type="number"
-                    name="quantity"
-                    class="form-control"
-                    required>
+                    <input type="number" name="quantity" class="form-control" required>
+
+                </div>
+
+                <div class="col-md-4 mb-4">
+
+                    <label class="form-label">
+                        Supplier
+                    </label>
+
+                    <input type="text" name="supplier" class="form-control" required>
 
                 </div>
 
@@ -299,10 +294,7 @@
                         Cost Price
                     </label>
 
-                    <input type="number"
-                    name="cost_price"
-                    class="form-control"
-                    required>
+                    <input type="number" name="cost_price" class="form-control" required>
 
                 </div>
 
@@ -312,9 +304,7 @@
                         Selling Price
                     </label>
 
-                    <input type="number"
-                    name="selling_price"
-                    class="form-control">
+                    <input type="number" name="selling_price" class="form-control">
 
                 </div>
 
@@ -328,13 +318,8 @@
                         Date
                     </label>
 
-                    <input type="date"
-                    name="date"
-                    class="form-control"
-                    value="{{ stock.date }}"
-                    min="{{ one_week_ago }}"
-                    max="{{ today }}"
-                    required>
+                    <input type="date" name="date" class="form-control" value="{{ stock.date }}"
+                        min="{{ one_week_ago }}" max="{{ today }}" required>
 
                 </div>
 
@@ -344,8 +329,7 @@
                         Mode of Payment
                     </label>
 
-                    <select name="payment"
-                    class="form-select">
+                    <select name="payment" class="form-select">
 
                         <option value="">
                             Select Payment Mode
@@ -375,8 +359,7 @@
                     Specification
                 </label>
 
-                <select name="specifications"
-                class="form-select">
+                <select name="specifications" class="form-select">
 
                     <option value="">
                         Select Specification
@@ -410,8 +393,7 @@
 
             </div>
 
-            <button type="submit"
-            class="submit-btn">
+            <button type="submit" class="submit-btn">
 
                 <i class="bi bi-plus-circle"></i>
                 Add Stock Item
@@ -431,4 +413,5 @@
     </footer>
 
 </body>
+
 </html>

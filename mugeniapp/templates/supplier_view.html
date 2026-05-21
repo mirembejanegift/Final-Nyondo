@@ -232,6 +232,11 @@
             <li><a href="{% url 'supplier_view' %}"><i class="fa-solid fa-warehouse"></i>Supplier View</a></li>
             <li><a href="{% url 'stock' %}"><i class="fa-solid fa-boxes-stacked"></i>Stock</a></li>
             <li><a href="{% url 'add' %}"><i class="fa-solid fa-eye"></i>Stock View</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'sales' %}"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'save' %}"><i class="fa-solid fa-table-list"></i>Saved Sales</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'customer' %}"><i class="fa-solid fa-people-group"></i> Customers view</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'customer_list' %}"><i class="fa-solid fa-users"></i>Customer </a></li> 
+        <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i class="fa-solid fa-chart-bar"></i> Reports</a></li>  
         </ul>
 
     </nav>
@@ -276,7 +281,7 @@
 
                     <tr>
 
-                        <td>{{ supply.stock.name }}</td>
+                        <td>{{ supply.product_name }}</td>
                         <td>{{ supply.quantity }}</td>
                         <td>{{ supply.supplier_name }}</td>
                         <td>{{ supply.supplier_contact }}</td>

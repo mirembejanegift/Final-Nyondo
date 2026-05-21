@@ -127,11 +127,7 @@
         {% csrf_token %}
 
         <label>Item</label>
-        <select name="stock" required>
-            {% for item in stocks %}
-                <option value="{{ item.id }}">{{ item.name }}</option>
-            {% endfor %}
-        </select>
+        <input type="text" name="product_name" value="{{ supplier.product_name }}" required>
 
         <label>Supplier</label>
         <input  type="text" name="supplier_name" value="{{ supplier.supplier_name }}" required> 

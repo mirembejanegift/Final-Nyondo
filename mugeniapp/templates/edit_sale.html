@@ -143,13 +143,7 @@
         {% csrf_token %}
 
         <label for="item_name">Item Name</label>
-
-        <select id="name" name="name" required>
-          {% for stock in stocks %}
-          <option value="{{ stock.id }}">{{ stock.name }}</option>
-          {% endfor %}
-
-        </select><br>
+        <input type="text" id="item_name" name="item_name" value="{{ sale.item_name }}" required>
 
         <label>Quantity</label>
         <input type="number" name="quantity" value="{{sale.quantity}}" required>
@@ -158,7 +152,7 @@
         <input type="number" name="unit_price" value="{{sale.unit_price}}" required>
 
         <label>Date</label>
-        <input type="date" name="date" value="{{sale.data}}" required>
+        <input type="date" name="date" value="{{sale.date}}" required>
 
         <label>Customer Name</label>
         <input type="text" name="customer_name" value="{{sale.customer_name}}" required>

@@ -228,8 +228,16 @@
       <li><a href="{% url 'index' %}"><i class="fa-solid fa-house"></i>Home</a></li>
       <li><a href="{% url 'sales' %}"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
       <li><a href="{% url 'save' %}"><i class="fa-solid fa-table-list"></i>Sales View</a></li>
-      <li><a href="{% url 'customer' %}"><i class="fa-solid fa-people-group"></i>Customers</a></li>
-      <li><a href="{% url 'customer_list' %}"><i class="fa-solid fa-user-plus"></i>Customer List</a></li>
+      {% if request.user.is_superuser %}
+      <li><a href="{% url 'customer' %}"><i class="fa-solid fa-users"></i>Customer</a></li>
+      <li><a href="{% url 'customer_list' %}"><i class="fa-solid fa-users"></i>Customer View</a></li>
+      <li><a href="{% url 'supplier' %}"><i class="fa-solid fa-truck"></i>Supplier</a></li>
+      <li><a href="{% url 'supplier_view' %}"><i class="fa-solid fa-warehouse"></i>Supplier View</a></li>
+      <li><a href="{% url 'stock' %}"><i class="fa-solid fa-boxes-stacked"></i>Stock</a></li>
+      <li><a href="{% url 'add' %}"><i class="fa-solid fa-eye"></i>Stock View</a></li>
+      <li><a href="{% url 'reports' %}"><i class="fa-solid fa-chart-bar"></i> Reports</a></li>
+      {% endif %}
+      
     </ul>
 
   </nav>
@@ -245,7 +253,7 @@
 
       <a href="{% url 'sales' %}" class="add-sale-btn">
         <i class="fa-solid fa-plus"></i>
-        Add Sale
+        Make Sale
       </a>
 
     </div>
@@ -314,6 +322,8 @@
                 <a href="{% url 'sales_receipt' sale.id %}" class="btn print-btn">
                   <i class="fa fa-print"></i>
                 </a>
+
+            
 
               </div>
             </td>

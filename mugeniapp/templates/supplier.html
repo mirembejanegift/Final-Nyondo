@@ -198,6 +198,13 @@
                         </a>
                     </li>
 
+
+            <li class="nav-item"><a class="nav-link" href="{% url 'sales' %}"><i class="bi bi-cart"></i> Sales</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'save' %}"><i class="bi bi-table"></i> Saved Sales</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'customer' %}"><i class="bi bi-people"></i> Customers</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'customer_list' %}"><i class="bi bi-person-plus"></i> Customer List</a></li> 
+            <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i class="bi bi-graph-up"></i> Reports</a></li> 
+
                 </ul>
 
             </div>
@@ -239,19 +246,10 @@
                         Item
                     </label>
 
-                    <select name="stock"
-                    class="form-select"
+                    <input type="text"
+                    name="product_name"
+                    class="form-control"
                     required>
-
-                        {% for item in stocks %}
-
-                        <option value="{{ item.id }}">
-                            {{ item.name }}
-                        </option>
-
-                        {% endfor %}
-
-                    </select>
 
                 </div>
 
