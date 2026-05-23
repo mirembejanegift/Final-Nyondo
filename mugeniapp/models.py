@@ -73,32 +73,32 @@ class Supplier(models.Model):
         return self.supplier_name
     
 
-    def save(self, *args, **kwargs):
+    # def save(self, *args, **kwargs):
 
-        # calculate total cost
-        self.total_cost = self.quantity * self.cost_price
+    #     # calculate total cost
+    #     self.total_cost = self.quantity * self.cost_price
 
-        # calculate balance
-        self.balance = self.total_cost - self.amount_paid
+    #     # calculate balance
+    #     self.balance = self.total_cost - self.amount_paid
 
-        # save supplier first
-        super().save(*args, **kwargs)
+    #     # save supplier first
+    #     super().save(*args, **kwargs)
 
-        # update stock automatically
-        stock, created = Stock.objects.get_or_create(
-            name=self.product_name,
-            defaults={
-                'quantity': 0,
-                'cost_price': self.cost_price,
-                'selling_price': 0,
-                'date': self.date
-            }
-        )
+    #     # update stock automatically
+    #     stock, created = Stock.objects.get_or_create(
+    #         name=self.product_name,
+    #         defaults={
+    #             'quantity': 0,
+    #             'cost_price': self.cost_price,
+    #             'selling_price': 0,
+    #             'date': self.date
+    #         }
+    #     )
 
-        # increase stock quantity
-        stock.quantity += self.quantity
+    #     # increase stock quantity
+    #     stock.quantity += self.quantity
 
-        # update cost price
-        stock.cost_price = self.cost_price
+    #     # update cost price
+    #     stock.cost_price = self.cost_price
 
-        stock.save()
+    #     stock.save()

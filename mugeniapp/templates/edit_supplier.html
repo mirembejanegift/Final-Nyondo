@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supply Page</title>
-    <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Supplier - NyondoStock</title>
 
-    <style>
+  <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      color: #1f2937;
+    }
 
-        nav {
+    /* NAV */
+    nav {
       background-color: #1E3A8A;
       color: white;
       padding: 1rem 2rem;
@@ -17,12 +24,12 @@
       justify-content: space-between;
       align-items: center;
     }
-    nav
 
-           nav .logo {
+    nav .logo {
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     nav ul {
       list-style: none;
       display: flex;
@@ -30,134 +37,142 @@
       margin: 0;
       padding: 0;
     }
+
     nav ul li a {
       color: white;
       text-decoration: none;
-      font-weight: 500;
     }
+
     nav ul li a:hover {
       text-decoration: underline;
     }
-    nav ul li a i {
-      margin-right: 0.35rem;
+
+    /* CONTAINER */
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
     }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-        }
 
-        h2 {
-            text-align: center;
-            color: #333;
-        }
+    /* CARD */
+    .form-card {
+      background: white;
+      width: 100%;
+      max-width: 650px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-        .container {
-            margin-left: 300px;
-            margin-right: 300px;
-        
-        }
+    h2 {
+      text-align: center;
+      color: #1E3A8A;
+      margin-bottom: 25px;
+    }
 
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
 
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      outline: none;
+    }
 
-        input, select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+    input:focus, select:focus {
+      border-color: #1E3A8A;
+      box-shadow: 0 0 3px rgba(30,58,138,0.3);
+    }
 
-        button {
-            margin-top: 15px;
-            padding: 12px;
-            width: 100%;
-            background-color:#1E3A8A ;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #1E3A8A;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-        button:hover {
-            background-color: #1E3A8A;
-        }
+    button:hover {
+      background-color: #374151;
+    }
 
-            footer {
+    footer {
       background-color: #1E3A8A;
       color: white;
       text-align: center;
-      padding: 20px;
-      margin-top: 20px;
-      
-      
+      padding: 1rem;
+      margin-top: 40px;
     }
-
- 
-    </style>
+  </style>
 </head>
-<body>
-    
-   <nav>
-    <div class="logo">NyondoStock</div>
-    <ul>
-      <li><a href="{% url 'index' %}"><i class="fa-solid fa-house"></i>Home</a></li>
-      <li><a href="{% url 'sales' %}"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
-      <li><a href="{% url 'save' %}"><i class="fa-solid fa-table-list"></i>Sales View</a></li>
-    </ul>
-  </nav>
 
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">NyondoStock</div>
+  <ul>
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li><a href="{% url 'sales' %}">Sales</a></li>
+    <li><a href="{% url 'save' %}">Sales View</a></li>
+  </ul>
+</nav>
+
+<!-- FORM -->
 <div class="container">
-    <h2>Supply Management</h2>
+  <div class="form-card">
+
+    <h2>Edit Supplier</h2>
 
     <form method="POST" action="{% url 'edit_supplier' supplier.id %}">
-        {% csrf_token %}
+      {% csrf_token %}
 
-        <label>Item</label>
-        <input type="text" name="product_name" value="{{ supplier.product_name }}" required>
+      <label>Item Name</label>
+      <input type="text" name="product_name" value="{{ supplier.product_name }}" required>
 
-        <label>Supplier</label>
-        <input  type="text" name="supplier_name" value="{{ supplier.supplier_name }}" required> 
+      <label>Supplier Name</label>
+      <input type="text" name="supplier_name" value="{{ supplier.supplier_name }}" required>
 
-        <label>quatity</label>
-        <input type="number" name="quantity" value="{{ supplier.quantity }}" required>
+      <label>Quantity</label>
+      <input type="number" name="quantity" min="1" value="{{ supplier.quantity }}" required>
 
+      <label>Cost Price</label>
+      <input type="number" name="cost_price" min="0" value="{{ supplier.cost_price }}" required>
 
-     <label> cost_price</label>
-     <input type="number" name="cost_price" value="{{ supplier.cost_price }}" required>
+      <label>Date Supplied</label>
+      <input type="date" name="date" value="{{ supplier.date|date:'Y-m-d' }}" required>
 
-        <label>Date Supplied</label>
-        <input type="date" name="date" value="{{ supplier.date }}" required>
+      <label>Payment Method</label>
+      <select name="method_of_payment" required>
+        <option value="cash" {% if supplier.method_of_payment == "cash" %}selected{% endif %}>Cash</option>
+        <option value="credit" {% if supplier.method_of_payment == "credit" %}selected{% endif %}>Credit</option>
+      </select>
 
-   <select name="method_of_payment" required>
-    <option value="cash" {% if supplier.method_of_payment == "cash" %}selected{% endif %}>Cash</option>
-    <option value="credit" {% if supplier.method_of_payment == "credit" %}selected{% endif %}>Credit</option>
-</select>
+      <label>Amount Paid</label>
+      <input type="number" name="amount_paid" value="{{ supplier.amount_paid }}" placeholder="Enter amount paid">
 
+      <button type="submit">Update Supply</button>
 
-        <label>Amount Paid</label>
-        <input type="number" name="amount_paid" value="{{ supplier.amount_paid }}" placeholder="Enter amount paid (if credit)">
-
-        <button type="submit">Add Supply</button>
     </form>
-    </div>
 
-     <footer>
-    &copy; 2026 NyondoStock Hardware Inventory System
-  </footer>
+  </div>
+</div>
+
+<footer>
+  &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
 
 </body>
 </html>

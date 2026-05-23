@@ -170,6 +170,8 @@
                 class="fa-solid fa-warehouse"></i>Supplier View</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i class="fa-solid fa-chart-bar"></i>
               Reports</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}"><i class="fa-solid fa-speedometer2"></i>
+              Dashboard</a></li>
           {% endif %}
         </ul>
         </ul>
@@ -222,10 +224,7 @@
               <input type="number" name="quantity" class="form-control" min="1" required>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label">Unit Price</label>
-              <input type="number" name="unit_price" class="form-control" min="0" required>
-            </div>
+           
 
             <div class="section-title">Delivery Info</div>
 

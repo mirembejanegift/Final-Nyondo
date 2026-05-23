@@ -4,14 +4,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sales - NyondoStock</title>
+  <title>Edit Customer - NyondoStock</title>
+
   <script src="https://kit.fontawesome.com/622a1b9c56.js" crossorigin="anonymous"></script>
+
   <style>
     body {
       background-color: #f4f6f9;
       margin: 0;
+      font-family: Arial, sans-serif;
+      color: #1f2937;
     }
 
+    /* NAV */
     nav {
       background-color: #1E3A8A;
       color: white;
@@ -37,76 +42,71 @@
     nav ul li a {
       color: white;
       text-decoration: none;
-      font-weight: 500;
     }
 
     nav ul li a:hover {
       text-decoration: underline;
     }
 
-    nav ul li a i {
-      margin-right: 0.35rem;
+    /* CENTER WRAPPER */
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
     }
 
-    .main {
-      margin-top: 50px;
-      margin-bottom: 50px;
-      margin-left: 250px;
-      margin-right: 250px;
+    /* FORM CARD */
+    .form-card {
+      background: white;
+      width: 100%;
+      max-width: 650px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     h2 {
       text-align: center;
-      font-size: 30px;
       color: #1E3A8A;
-      ;
-    }
-
-    form {
-      background-color: white;
-      padding: 30px;
-      border-radius: 10px;
-
-    }
-
-
-
-    input {
-      width: 100%;
-      font-size: 15px;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-
+      margin-bottom: 25px;
     }
 
     label {
-      font-weight: 500;
-      margin-left: 10px;
-      font-size: 20px;
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 14px;
     }
 
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+      outline: none;
+    }
 
-    /* Button */
+    input:focus {
+      border-color: #1E3A8A;
+      box-shadow: 0 0 3px rgba(30,58,138,0.3);
+    }
+
     button {
       width: 100%;
-      background-color: #5b7394;
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #1E3A8A;
       color: white;
-      height: 40px;
       border: none;
       border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
     }
 
     button:hover {
-      background-color: rgb(154, 154, 222);
-    }
-
-    select {
-      width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      background-color: #374151;
     }
 
     footer {
@@ -114,66 +114,62 @@
       color: white;
       text-align: center;
       padding: 1rem;
-      margin-top: auto;
+      margin-top: 40px;
     }
   </style>
-
 </head>
 
 <body>
 
+<!-- NAV -->
+<nav>
+  <div class="logo">NyondoStock</div>
+  <ul>
+    <li><a href="{% url 'customer' %}">Customer View</a></li>
+    <li><a href="{% url 'customer_list' %}">Customer List</a></li>
+  </ul>
+</nav>
 
-  <nav>
-    <div class="logo">NyondoStock</div>
-    <ul>
-      <li><a href="{% url 'customer' %}"><i class="fa-solid fa-people-group"></i>Customer View</a></li>
-      <li><a href="{% url 'customer_list' %}"><i class="fa-solid fa-user-plus"></i>Customer</a></li>
-    </ul>
-  </nav>
+<!-- FORM -->
+<div class="container">
+  <div class="form-card">
 
-  <div class="container">
+    <h2>Edit Customer</h2>
 
-    <div class="main">
+    <form method="POST" action="{% url 'edit_customer' customer.id %}">
+      {% csrf_token %}
 
+      <label>Name</label>
+      <input type="text" name="name" value="{{ customer.name }}" required>
 
-      <h2>Customer Management</h2>
+      <label>NIN</label>
+      <input type="text" name="nin" value="{{ customer.nin }}" required>
 
-      <form method="POST" action="{% url 'edit_customer' customer.id %}">
-        {% csrf_token %}
+      <label>Email</label>
+      <input type="email" name="email" value="{{ customer.email }}" required>
 
-        <label>Name</label>
-        <input type="text" name="name" value="{{customer.name}}" required>
+      <label>Contact</label>
+      <input type="number" name="contact" value="{{ customer.contact }}" required>
 
-        <label>NIN</label>
-        <input type="text" name="nin" value="{{customer.nin}}" required>
+      <label>Product</label>
+      <input type="text" name="product" value="{{ customer.product }}" required>
 
-        <label>Email</label>
-        <input type="email" name="email" value="{{customer.email}}" required>
+      <label>Amount</label>
+      <input type="number" name="amount" value="{{ customer.amount }}" required>
 
-        <label>Contact</label>
-        <input type="number" name="contact" value="{{customer.contact}}" required>
+      <label>Date</label>
+      <input type="date" name="date" value="{{ customer.date|date:'Y-m-d' }}" required>
 
-        <label>Product</label>
-        <input type="text" name="product" value="{{customer.product}}" required>
+      <button type="submit">Update Customer</button>
 
-        <label>Amount</label>
-        <input type="number" name="amount" value="{{customer.amount}}" required>
-        
-    <label>Date</label>
-    <input type="date" name="date" value="{{customer.date}}" required>
-
-
-        <button type="submit" class="submit-btn">Save</button>
-
-      </form>
-    </div>
-
+    </form>
 
   </div>
-  <footer>
-    &copy; 2026 NyondoStock Hardware Inventory System
-  </footer>
+</div>
+
+<footer>
+  &copy; 2026 NyondoStock Hardware Inventory System
+</footer>
 
 </body>
-
 </html>

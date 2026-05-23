@@ -107,11 +107,10 @@
 <nav>
   <div class="logo">NyondoStock</div>
   <ul>
-    <li><a href="#"><i class="fa-solid fa-house"></i>Home</a></li>
-    <li><a href="#"><i class="fa-solid fa-chart-line"></i>Dashboard</a></li>
-    <li><a href="#"><i class="fa-solid fa-cart-shopping"></i>Sales</a></li>
-    <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i>Stock</a></li>
-    <li><a href="#"><i class="fa-solid fa-money-check-dollar"></i>Deposit</a></li>
+  
+    <li><a href="{% url 'stock' %}"><i class="fa-solid fa-boxes-stacked"></i>Stock</a></li>
+    <li><a href="{% url 'add' %}"><i class="fa-solid fa-table-list"></i>Stock View</a></li>
+   
   </ul>
 </nav>
 
@@ -125,7 +124,7 @@
     <!-- Product Name -->
     <div class="form-group">
       <label>Product Name</label>
-      <input type="text" name="product" value="{{ stock.name }}" required>
+<input type="text" name="name" value="{{ stock.name }}" required>
     </div>
 
     <!-- Category -->

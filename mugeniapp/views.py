@@ -13,6 +13,52 @@ from .models import Sales
 from .models import Customer
 from .models import Supplier
 from django.db.models import Sum
+from django.utils.timezone import now
+from django.shortcuts import render
+from django.db.models import Sum, Count, F
+from django.utils import timezone
+from datetime import timedelta
+
+
+from .models import Stock, Sales, Customer, Supplier
+
+
+def dashboard(request):
+
+    # TOTAL PRODUCTS IN STOCK
+    total_products = Stock.objects.count()
+
+    # TODAY'S SALES (ONLY TODAY)
+    today = now().date()
+
+    today_sales_qs = Sales.objects.filter(date=today)
+
+    total_sales_amount = today_sales_qs.aggregate(
+        total=Sum('total_price')
+    )['total'] or 0
+
+    # CUSTOMERS
+    scheme_customers = Customer.objects.count()
+
+    # SUPPLIERS
+    credit_suppliers = Supplier.objects.all()
+
+    # RECENT SALES
+    recent_sales = Sales.objects.order_by('-id')[:5]
+
+    # LOW STOCK ALERT
+    low_stock_products = Stock.objects.filter(quantity__lte=10)
+
+    context = {
+        'total_products': total_products,
+        'today_sales_amount': total_sales_amount,
+        'scheme_customers': scheme_customers,
+        'credit_suppliers': credit_suppliers,
+        'recent_sales': recent_sales,
+        'low_stock_products': low_stock_products,
+    }
+
+    return render(request, 'dashboard.html', context)
 
 
 # # Create your views here.
@@ -58,36 +104,41 @@ def logout_view(request):
 # THIS IS THE DASHBOARD VIEW. IT DISPLAYS KEY METRICS AND RECENT ACTIVITY TO GIVE THE ADMIN A QUICK OVERVIEW OF THE SYSTEM'S STATUS.
 
 @login_required
+
+
+
 def dashboard(request):
-    # this is calling upon the total number of products in stock, 
+
+    # TOTAL PRODUCTS IN STOCK
     total_products = Stock.objects.count()
 
-# this is calculating the total sales amount for the current day by summing up the total_price field of all sales made today.
-    today_sales = Sales.objects.all()
-    total_sales_amount = sum(sale.total_price for sale in today_sales)
+    # TODAY'S SALES (ONLY TODAY)
+    today = now().date()
 
+    today_sales_qs = Sales.objects.filter(date=today)
 
-# this is displayin the number of customers on a credit scheme by counting the total number of customer records in the database.
+    total_sales_amount = today_sales_qs.aggregate(
+        total=Sum('total_price')
+    )['total'] or 0
+
+    # CUSTOMERS
     scheme_customers = Customer.objects.count()
 
-# this is fetching all supplier records to display a list of suppliers who have supplied stock on credit.
+    # SUPPLIERS
     credit_suppliers = Supplier.objects.all()
 
-# this is fetching the 5 most recent sales to display recent activity on the dashboard.
+    # RECENT SALES
     recent_sales = Sales.objects.order_by('-id')[:5]
 
-# this is fetching all stock items that have a quantity of 5 or less to display low stock alerts on the dashboard. 
+    # LOW STOCK ALERT
     low_stock_products = Stock.objects.filter(quantity__lte=10)
-
-    
 
     context = {
         'total_products': total_products,
-        'total_sales_amount': total_sales_amount,
+        'today_sales_amount': total_sales_amount,
         'scheme_customers': scheme_customers,
         'credit_suppliers': credit_suppliers,
         'recent_sales': recent_sales,
-    
         'low_stock_products': low_stock_products,
     }
 
@@ -178,33 +229,70 @@ def add(request):
 
 @login_required
 def delete_stock(request, id):
-    stock = get_object_or_404(Stock, id=id)
-    stock.delete()
-    return redirect('add')
+     if request.user.is_superuser:
+        stock = get_object_or_404(Stock, id=id)
+        stock.delete()
+        return redirect('add')
+     else:
+        messages.error(request, "You are not authorized to delete this stock.")
+        return redirect('add')
 
 
 @login_required
 def edit_stock(request, id):
+ if request.user.is_superuser:
     stock = get_object_or_404(Stock, id=id)
-    stocks = Stock.objects.all()
-
-
 
     if request.method == 'POST':
-        stock.name = request.POST.get('name')
-        stock.category = request.POST.get('category')
-        stock.quantity = request.POST.get('quantity')
-        stock.cost_price = request.POST.get('cost_price')
-        stock.selling_price = request.POST.get('selling_price')
-        stock.date = request.POST.get('date')
+
+        name = request.POST.get('name')
+        category = request.POST.get('category')
+        quantity = request.POST.get('quantity')
+        supplier = request.POST.get('supplier')
+        cost_price = request.POST.get('cost_price')
+        selling_price = request.POST.get('selling_price')
+        date = request.POST.get('date')
+
+        errors = []
+
+        if not name:
+            errors.append("Product name is required")
+
+        if not quantity or int(quantity) < 0:
+            errors.append("Quantity must be 0 or more")
+
+        if not cost_price or int(cost_price) < 0:
+            errors.append("Cost price must be valid")
+
+        if not selling_price or int(selling_price) < 0:
+            errors.append("Selling price must be valid")
+
+        if not supplier:
+            errors.append("Supplier is required")
+
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            return render(request, 'edit_stock.html', {'stock': stock})
+
+        stock.name = name
+        stock.category = category
+        stock.quantity = quantity
+        stock.cost_price = cost_price
+        stock.selling_price = selling_price
+        stock.date = date
         stock.specifications = request.POST.get('specifications')
+        stock.payment = request.POST.get('payment')
+        stock.supplier = request.POST.get('supplier')
+
         stock.save()
+
+        messages.success(request, "Stock updated successfully")
         return redirect('add')
 
-    return render(request, 'edit_stock.html', {
-        'stock': stock,
-        'stocks': stocks
-    })
+    return render(request, 'edit_stock.html', {'stock': stock})
+
+
     
 
 # THIS IS THE SALES VIEW. IT HANDLES THE LOGIC FOR RECORDING SALES, INCLUDING VALIDATING INPUT, CALCULATING TOTALS, AND UPDATING STOCK QUANTITIES.
@@ -218,33 +306,36 @@ def sales(request):
 
         stock_id = payload.get('stock_id')
         quantity = payload.get('quantity')
-        unit_price = payload.get('unit_price')
         date_str = payload.get('date')
         customer_name = payload.get('customer_name')
         customer_contact = payload.get('customer_contact')
         distance = payload.get('distance')
 
-# VALIDATION: CHECK IF ALL REQUIRED FIELDS ARE PRESENT
-        if not all([stock_id, quantity, unit_price, date_str, customer_name, customer_contact, distance]):
+        # VALIDATION: required fields (NO unit_price anymore)
+        if not all([stock_id, quantity, date_str, customer_name, customer_contact, distance]):
             messages.error(request, "All fields are required.")
             return redirect('sales')
 
+        # Convert numeric values safely
         try:
             quantity = int(quantity)
-            unit_price = int(unit_price)
             distance = float(distance)
         except ValueError:
             messages.error(request, "Invalid numeric values entered.")
             return redirect('sales')
 
+        # Get stock object
         stock = get_object_or_404(Stock, id=stock_id)
-    
 
+        # AUTO PRICE (NO USER INPUT)
+        unit_price = stock.selling_price
+
+        # Check stock availability
         if quantity > stock.quantity:
             messages.error(request, f"Only {stock.quantity} items available in stock.")
             return redirect('sales')
 
-        # calculate totals
+        # CALCULATIONS
         total_price = quantity * unit_price
 
         if distance <= 10 and total_price <= 500000:
@@ -252,23 +343,27 @@ def sales(request):
         else:
             transport_fee = 30000
 
-        grand_total = total_price + transport_fee   #  YOU WERE MISSING THIS
+        grand_total = total_price + transport_fee
 
-        #  CREATE SALE FIRST
-        sale = Sales.objects.create(
-            s_name=stock.name,
+        # CREATE SALE (FIXED FIELD NAME)
+        Sales.objects.create(
+            name=stock,   # FIXED FK FIELD
+
             quantity=quantity,
             unit_price=unit_price,
             total_price=total_price,
+
             distance=distance,
             transport_fee=transport_fee,
             grand_total=grand_total,
-            date=date_str,
+
+            date=datetime.strptime(date_str, "%Y-%m-%d").date(),
+
             customer_name=customer_name,
             customer_contact=customer_contact
         )
 
-        #  THEN REDUCE STOCK SAFELY
+        # REDUCE STOCK
         stock.quantity -= quantity
         stock.save()
 
@@ -306,37 +401,67 @@ def delete_sale(request, id):
     return redirect('save')
 
 
+
 @login_required
 def edit_sale(request, id):
-    sale = get_object_or_404(Sales, id=id)  # FIXED: use Sales model
-  
+    if not request.user.is_superuser:
+        return redirect('sales_list')
+
+    sale = get_object_or_404(Sales, id=id)
 
     if request.method == 'POST':
-        stock = get_object_or_404(Stock, name=sale.name)
-        sale.quantity = int(request.POST.get('quantity'))
-        sale.unit_price = int(request.POST.get('unit_price'))
-        sale.date = request.POST.get('date')
-        sale.customer_name = request.POST.get('customer_name')
-        sale.customer_contact = request.POST.get('customer_contact')
-        sale.distance = float(request.POST.get('distance'))
 
-        # recalculate totals
-        sale.total_price = sale.quantity * sale.unit_price
+        name = request.POST.get('name')
+        quantity = request.POST.get('quantity')
+        distance = request.POST.get('distance')
+        unit_price = request.POST.get('unit_price')
+        date = request.POST.get('date')
+        customer_name = request.POST.get('customer_name')
+        customer_contact = request.POST.get('customer_contact')
 
-        if sale.distance <= 10 and sale.total_price <= 500000:
-            sale.transport_fee = 0
-        else:
-            sale.transport_fee = 30000
+        errors = []
 
-        sale.grand_total = sale.total_price + sale.transport_fee
+        if not name:
+            errors.append("Sale name is required")
+
+        if not quantity or int(quantity) < 0:
+            errors.append("Quantity must be 0 or more")
+
+        if not unit_price or int(unit_price) < 0:
+            errors.append("Unit price must be valid")
+
+        if not date:
+            errors.append("Date is required")
+
+        if not customer_name:
+            errors.append("Customer name is required")
+
+        if not customer_contact:
+            errors.append("Customer contact is required")
+
+
+        if distance and float(distance) < 0:
+            errors.append("Distance cannot be negative")
+
+        if errors:
+            for e in errors:
+                messages.error(request, e)
+            return render(request, 'edit_sale.html', {'sale': sale})
+
+        sale.name = name
+        sale.quantity = quantity
+        sale.distance = distance
+        sale.unit_price = unit_price
+        sale.date = date
+        sale.customer_name = customer_name
+        sale.customer_contact = customer_contact
 
         sale.save()
-        return redirect('save')
 
-    return render(request, 'edit_sale.html', {
-        'sale': sale,
-        'stock': stock
-    })
+        messages.success(request, "Sale updated successfully")
+        return redirect('sales_list')
+
+    return render(request, 'edit_sale.html', {'sale': sale})
 
 
 
@@ -704,35 +829,10 @@ def supplier_receipt(request, id):
 
 
 @login_required
+
+
+
+
 def reports(request):
 
-    total_stock_items = Stock.objects.count()
-    total_stock_quantity = Stock.objects.aggregate(
-        total=Sum('quantity')
-    )['total'] or 0
-
-    low_stock_items = Stock.objects.filter(quantity__lt=5)
-    out_of_stock = Stock.objects.filter(quantity=0)
-
-    total_customers = Customer.objects.count()
-    total_sales = Customer.objects.aggregate(
-        total=Sum('amount')
-    )['total'] or 0
-
-    # SUPPLIER SUMMARY
-    total_suppliers = Supplier.objects.count()
-
-    context = {
-        "total_stock_items": total_stock_items,
-        "total_stock_quantity": total_stock_quantity,
-        "low_stock_items": low_stock_items,
-        "out_of_stock": out_of_stock,
-
-        "total_customers": total_customers,
-        "total_sales": total_sales,
-
-        "total_suppliers": total_suppliers,
-    }
-
-    return render(request, "reports.html", context)
- 
+    return render(request, 'reports.html',)
