@@ -1,103 +1,230 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NyondoStock Login</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #1E3A8A;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+    <style>
 
-    .container {
-      background: white;
-      width: 100%;
-      max-width: 420px;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      text-align: center;
-    }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    h1 {
-      margin-bottom: 25px;
-      color: #1E3A8A;
-    }
+        body{
+            font-family: Arial, sans-serif;
+            background: #1E3A8A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-    label {
-      display: block;
-      text-align: left;
-      margin: 10px 0 5px;
-      font-size: 14px;
-      font-weight: bold;
-    }
+        .container{
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-      outline: none;
-    }
+        .logo{
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-    input:focus {
-      border-color: #1E3A8A;
-    }
+        .logo h1{
+            color: #1E3A8A;
+            font-size: 32px;
+        }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 8px;
-      background: #1E3A8A;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+        .subtitle{
+            text-align: center;
+            color: gray;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
 
-    button:hover {
-      background: #0f255f;
-    }
+        form{
+            width: 100%;
+        }
 
-    .footer {
-      margin-top: 15px;
-      font-size: 12px;
-      color: gray;
-    }
-  </style>
+        label{
+            display: block;
+            margin-bottom: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input.error {
+    border: 1px solid #cc0000;
+    background: #fff5f5;
+}
+
+.error-text {
+    color: #cc0000;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+        input{
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        input:focus{
+            border-color: #1E3A8A;
+            box-shadow: 0 0 5px rgba(30,58,138,0.3);
+        }
+
+        button{
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #1E3A8A;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: 0.3s;
+        }
+
+        button:hover{
+            background: #142c6e;
+        }
+
+        /* DJANGO MESSAGE STYLES */
+
+        .message{
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .message.error{
+            background: #ffe5e5;
+            color: #cc0000;
+            border: 1px solid #ffb3b3;
+        }
+
+        .message.success{
+            background: #e6ffed;
+            color: #008a2e;
+            border: 1px solid #b3ffc7;
+        }
+
+        .footer{
+            margin-top: 25px;
+            text-align: center;
+            font-size: 13px;
+            color: gray;
+        }
+
+        @media(max-width: 500px){
+
+            .container{
+                padding: 30px 20px;
+            }
+
+            .logo h1{
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>Welcome Back</h1>
+    <div class="container">
 
-    <form method="POST">
-      {% csrf_token %}
+        <div class="logo">
+            <h1>Nyondo Hardware  System</h1>
+        </div>
 
-      <label>Username</label>
-      <input type="text" name="username" placeholder="Enter username" required>
+        <p class="subtitle">
+            Login to continue
+        </p>
 
-      <label>Password</label>
-      <input type="password" name="password" placeholder="Enter password" required>
+       <form method="POST" novalidate>
+    {% csrf_token %}
 
-      <button type="submit">LOGIN</button>
-    </form>
+    <!-- GLOBAL ERROR -->
+    {% if errors.general %}
+        <div class="message error">
+            {{ errors.general }}
+        </div>
+    {% endif %}
 
-    <div class="footer">
-      NyondoStock System
+    <!-- DJANGO MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- USERNAME -->
+    <label for="username">Username</label>
+    <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="Enter your username"
+        value="{{ data.username }}"
+        class="{% if errors.username %}error{% endif %}"
+    >
+
+    {% if errors.username %}
+        <div class="error-text">
+            {{ errors.username }}
+        </div>
+    {% endif %}
+
+    <!-- PASSWORD -->
+    <label for="password">Password</label>
+    <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Enter your password"
+        class="{% if errors.password %}error{% endif %}"
+    >
+
+    {% if errors.password %}
+        <div class="error-text">
+            {{ errors.password }}
+        </div>
+    {% endif %}
+
+    <button type="submit">
+        Login
+    </button>
+</form>
+
+        <div class="footer">
+         
+    <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
+        </div>
+
     </div>
-  </div>
 
 </body>
 </html>

@@ -6,414 +6,354 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NyondoStock - Add Stock</title>
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
         body {
             background: #f1f5f9;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             color: #334155;
         }
 
         /* NAVBAR */
-
         .navbar {
-            background: #1E3A8A;
-            padding: 15px 40px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            padding: 12px 24px;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
         }
 
         .navbar-brand {
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+            color: #ffffff !important;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
-        .navbar-brand:hover {
-            color: white;
+        .navbar-nav {
+            gap: 6px;
         }
 
-        .nav-link {
-            color: #cbd5e1 !important;
-            margin-left: 15px;
-            transition: 0.3s;
+        .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            padding: 10px 16px;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            font-weight: 500;
         }
 
-        .nav-link:hover {
-            color: white !important;
+        .navbar-nav .nav-link i {
+            margin-right: 6px;
         }
 
-        /* PAGE TITLE */
+        .navbar-nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
 
+        .navbar-nav .nav-link.active {
+            background: #ffffff;
+            color: #1e3a8a !important;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 8px;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* FORM CONTAINER */
         .page-title {
             text-align: center;
-            margin-top: 40px;
-            margin-bottom: 30px;
+            margin: 40px 0 30px 0;
         }
 
         .page-title h1 {
-            font-weight: bold;
+            font-weight: 700;
             color: #0f172a;
+            font-size: 2.25rem;
         }
 
         .page-title p {
-            color: gray;
+            color: #64748b;
+            font-size: 1.05rem;
         }
-
-        /* FORM CARD */
 
         .form-container {
-            max-width: 750px;
-            margin: auto;
-            background: white;
+            max-width: 800px;
+            margin: 0 auto 60px auto;
+            background: #ffffff;
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
         }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #1e293b;
-        }
-
-        /* FORM */
 
         .form-label {
             font-weight: 600;
-            margin-bottom: 8px;
+            color: #475569;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
         }
 
         .form-control,
         .form-select {
-            padding: 12px;
-            border-radius: 10px;
+            padding: 11px 14px;
+            border-radius: 8px;
             border: 1px solid #cbd5e1;
+            color: #1e293b;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         .form-control:focus,
         .form-select:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 0.15rem rgba(37, 99, 235, 0.25);
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
         }
 
-        /* BUTTON */
+        /* CUSTOM ERROR STATES */
+        .error-border {
+            border: 1px solid #ef4444 !important;
+            background-color: #fef2f2;
+        }
 
+        .error-border:focus {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15) !important;
+        }
+
+        .error-text {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* SUBMIT BUTTON */
         .submit-btn {
             background: #2563eb;
-            color: white;
+            color: #ffffff;
             border: none;
             padding: 14px;
             width: 100%;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 17px;
-            transition: 0.3s;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
         .submit-btn:hover {
             background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
         }
 
-        /* FOOTER */
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
 
         footer {
-            background: #1E3A8A;
+            background: #1e3a8a;
             color: white;
             text-align: center;
-            padding: 18px;
-            margin-top: 30px;
+            padding: 1rem;
+            margin-top: auto;
         }
     </style>
-
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
-
-    <nav class="navbar navbar-expand-lg">
-
+    <nav class="navbar navbar-expand-xl navbar-dark">
         <div class="container-fluid">
-
             <a class="navbar-brand" href="{% url 'index' %}">
-                NyondoStock
+                <i class="bi bi-box-seam-fill me-2"></i>NyondoStock
             </a>
 
             <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-
                 <span class="navbar-toggler-icon"></span>
-
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-
                 <ul class="navbar-nav ms-auto">
-
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">
-                            <i class="bi bi-house"></i> Home
+                        <a class="nav-link active" href="{% url 'index' %}">
+                            <i class="bi bi-house-door-fill"></i>Home
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'add' %}">
-                            <i class="bi bi-eye"></i> Stock View
+                            <i class="bi bi-eye-fill"></i>Stock View
                         </a>
                     </li>
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'stock' %}">
-                            <i class="bi bi-box-seam"></i> Stock
+                            <i class="bi bi-box-fill"></i>Stock
                         </a>
                     </li>
 
-
                     {% if request.user.is_superuser %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'supplier' %}"><i
-                                    class="fa-solid fa-truck"></i>Supplier</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'supplier_view' %}"><i
-                                    class="fa-solid fa-warehouse"></i>Supplier View</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'sales' %}"><i
-                                    class="fa-solid fa-cart-shopping"></i>Sales</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'save' %}"><i
-                                    class="fa-solid fa-table-list"></i>Saved Sales</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'customer' %}"><i
-                                    class="fa-solid fa-people-group"></i> Customers view</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'customer_list' %}"><i
-                                    class="fa-solid fa-users"></i>Customer </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i
-                                    class="fa-solid fa-chart-bar"></i> Reports</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}"><i
-                                    class="fa-solid fa-speedometer2"></i> Dashboard</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'supplier' %}">
+                            <i class="bi bi-truck"></i>Supplier
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'supplier_view' %}">
+                            <i class="bi bi-building"></i>Supplier View
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'sales' %}">
+                            <i class="bi bi-cart-fill"></i>Sales
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'save' %}">
+                            <i class="bi bi-table"></i>Saved Sales
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer' %}">
+                            <i class="bi bi-people-fill"></i>Customer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'customer_list' %}">
+                            <i class="bi bi-person-lines-fill"></i>Customer View
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'reports' %}">
+                            <i class="bi bi-bar-chart-fill"></i>Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="bi bi-speedometer2"></i>Dashboard
+                        </a>
+                    </li>
                     {% endif %}
                 </ul>
-
             </div>
-
         </div>
-
     </nav>
 
-    <!-- PAGE TITLE -->
-
-    <div class="page-title">
-
+    <div class="page-title px-3">
         <h1>Add New Stock Item</h1>
-
         <p>Manage and track hardware inventory easily</p>
-
     </div>
 
-    <!-- FORM -->
+    <div class="container">
+        <div class="form-container">
+            <form method="POST" action="{% url 'stock' %}">
+                {% csrf_token %}
 
-    <div class="form-container">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Product Name</label>
+                        <input type="text" name="name" value="{{ data.name }}"
+                            class="form-control {% if errors.name %}error-border{% endif %}" placeholder="e.g. Cement Block">
+                        {% if errors.name %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.name }}</div>
+                        {% endif %}
+                    </div>
 
-        <div class="section-title">
-            Product Information
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select {% if errors.category %}error-border{% endif %}">
+                            <option value="">Select Category</option>
+                            <option value="Building Materials" {% if data.category == "Building Materials" %}selected{% endif %}>Building Materials</option>
+                            <option value="Hardware" {% if data.category == "Hardware" %}selected{% endif %}>Hardware</option>
+                            <option value="Roofing" {% if data.category == "Roofing" %}selected{% endif %}>Roofing</option>
+                            <option value="Electrical" {% if data.category == "Electrical" %}selected{% endif %}>Electrical</option>
+                        </select>
+                        {% if errors.category %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.category }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" value="{{ data.quantity }}"
+                            class="form-control {% if errors.quantity %}error-border{% endif %}" placeholder="0">
+                        {% if errors.quantity %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.quantity }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label class="form-label">Supplier</label>
+                        <input type="text" name="supplier" value="{{ data.supplier }}"
+                            class="form-control {% if errors.supplier %}error-border{% endif %}" placeholder="Supplier Name">
+                        {% if errors.supplier %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.supplier }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-4 mb-4">
+                        <label class="form-label">Cost Price</label>
+                        <input type="number" name="cost_price" value="{{ data.cost_price }}"
+                            class="form-control {% if errors.cost_price %}error-border{% endif %}" placeholder="0.00">
+                        {% if errors.cost_price %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.cost_price }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Selling Price</label>
+                        <input type="number" name="selling_price" value="{{ data.selling_price }}"
+                            class="form-control {% if errors.selling_price %}error-border{% endif %}" placeholder="0.00">
+                        {% if errors.selling_price %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.selling_price }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="date" value="{{ data.date }}"
+                            class="form-control {% if errors.date %}error-border{% endif %}">
+                        {% if errors.date %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.date }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label">Mode of Payment</label>
+                        <select name="payment" class="form-select {% if errors.payment %}error-border{% endif %}">
+                            <option value="">Select Payment Mode</option>
+                            <option value="Cash" {% if data.payment == "Cash" %}selected{% endif %}>Cash</option>
+                            <option value="Credit" {% if data.payment == "Credit" %}selected{% endif %}>Credit</option>
+                            <option value="Mobile Money" {% if data.payment == "Mobile Money" %}selected{% endif %}>Mobile Money</option>
+                        </select>
+                        {% if errors.payment %}
+                            <div class="text-danger error-text"><i class="bi bi-exclamation-circle me-1"></i>{{ errors.payment }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    <button type="submit" class="submit-btn">
+                        <i class="bi bi-plus-circle me-2"></i>Add Stock Item
+                    </button>
+                </div>
+            </form>
         </div>
-
-        <form method="post" action="{% url 'stock' %}">
-
-            {% csrf_token %}
-
-            <div class="row">
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Product Name
-                    </label>
-
-                    <input type="text" name="name" class="form-control" value="{{ stock.name }}" required>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Category
-                    </label>
-
-                    <select name="category" class="form-select" required>
-
-                        <option value="">
-                            Select Category
-                        </option>
-
-                        <option>
-                            Building Materials
-                        </option>
-
-                        <option>
-                            Hardware
-                        </option>
-
-                        <option>
-                            Roofing
-                        </option>
-
-                        <option>
-                            Electrical
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Quantity
-                    </label>
-
-                    <input type="number" name="quantity" class="form-control" required>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Supplier
-                    </label>
-
-                    <input type="text" name="supplier" class="form-control" required>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Cost Price
-                    </label>
-
-                    <input type="number" name="cost_price" class="form-control" required>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Selling Price
-                    </label>
-
-                    <input type="number" name="selling_price" class="form-control">
-
-                </div>
-
-            </div>
-
-            <div class="row">
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Date
-                    </label>
-
-                    <input type="date" name="date" class="form-control" value="{{ stock.date }}"
-                        min="{{ one_week_ago }}" max="{{ today }}" required>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Mode of Payment
-                    </label>
-
-                    <select name="payment" class="form-select">
-
-                        <option value="">
-                            Select Payment Mode
-                        </option>
-
-                        <option>
-                            Cash
-                        </option>
-
-                        <option>
-                            Credit
-                        </option>
-
-                        <option>
-                            Mobile Money
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="mb-4">
-
-                <label class="form-label">
-                    Specification
-                </label>
-
-                <select name="specifications" class="form-select">
-
-                    <option value="">
-                        Select Specification
-                    </option>
-
-                    <optgroup label="Cement">
-                        <option>32.5R</option>
-                        <option>42.5N</option>
-                    </optgroup>
-
-                    <optgroup label="Iron Bars">
-                        <option>10mm</option>
-                        <option>12mm</option>
-                        <option>16mm</option>
-                    </optgroup>
-
-                    <optgroup label="Nails">
-                        <option>1 inch</option>
-                        <option>3 inch</option>
-                        <option>4 inch</option>
-                        <option>5 inch</option>
-                        <option>Roofing Nails</option>
-                    </optgroup>
-
-                    <optgroup label="Barbed Wires">
-                        <option>High Tensile</option>
-                        <option>Low Tensile</option>
-                    </optgroup>
-
-                </select>
-
-            </div>
-
-            <button type="submit" class="submit-btn">
-
-                <i class="bi bi-plus-circle"></i>
-                Add Stock Item
-
-            </button>
-
-        </form>
-
+            <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
     </div>
 
-    <!-- FOOTER -->
-
-    <footer>
-
-        © 2026 NyondoStock Hardware Inventory System
-
-    </footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

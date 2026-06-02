@@ -2,54 +2,45 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-    content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>NyondoStock - Supply Management</title>
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
+    <!-- Font Awesome (MISSING IN YOUR CODE) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <style>
         body{
-            background: #f1f5f9;
+            background: #e6ecff;
             font-family: 'Segoe UI', sans-serif;
             color: #334155;
         }
 
-        /* NAVBAR */
-
         .navbar{
-            background:#1E3A8A ;
-            padding: 15px 40px;
+            background:#1E3A8A;
+            padding: 12px 30px;
         }
 
         .navbar-brand{
-            color: white;
-            font-size: 24px;
+            color: white !important;
+            font-size: 22px;
             font-weight: bold;
-        }
-
-        .navbar-brand:hover{
-            color: white;
         }
 
         .nav-link{
             color: #cbd5e1 !important;
-            margin-left: 15px;
-            transition: 0.3s;
+            margin-left: 10px;
         }
 
         .nav-link:hover{
             color: white !important;
         }
-
-        /* PAGE TITLE */
 
         .page-title{
             text-align: center;
@@ -61,12 +52,6 @@
             font-weight: bold;
             color: #1E3A8A;
         }
-
-        .page-title p{
-            color: gray;
-        }
-
-        /* FORM CONTAINER */
 
         .form-container{
             max-width: 850px;
@@ -85,27 +70,15 @@
             color: #1E3A8A;
         }
 
-        /* FORM */
-
         .form-label{
             font-weight: 600;
-            margin-bottom: 8px;
         }
 
         .form-control,
         .form-select{
             padding: 12px;
             border-radius: 10px;
-            border: 1px solid #cbd5e1;
         }
-
-        .form-control:focus,
-        .form-select:focus{
-            border-color: #2563eb;
-            box-shadow: 0 0 0 0.15rem rgba(37,99,235,0.25);
-        }
-
-        /* BUTTON */
 
         .submit-btn{
             background: #2563eb;
@@ -116,292 +89,245 @@
             border-radius: 12px;
             font-weight: bold;
             font-size: 17px;
-            transition: 0.3s;
         }
 
         .submit-btn:hover{
             background: #1d4ed8;
         }
 
-        /* FOOTER */
-
-        footer{
-            background: #1E3A8A;
-            color: white;
-            text-align: center;
-            padding: 18px;
-            margin-top: 30px;
+        .error-input{
+            border: 2px solid #dc3545 !important;
+            background: #fff5f5;
         }
 
-    </style>
+        .error-text{
+            color: #dc3545;
+            font-size: 13px;
+            margin-top: 5px;
+            display: block;
+            font-weight: 500;
+        }
 
+        footer {
+            background: #1e3a8a;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
+<!-- NAVBAR FIXED -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
 
-    <nav class="navbar navbar-expand-lg">
-
-        <div class="container-fluid">
-
-            <a class="navbar-brand" href="#">
-                NyondoStock
-            </a>
-
-            <button class="navbar-toggler bg-light"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
-
-                <span class="navbar-toggler-icon"></span>
-
-            </button>
-
-            <div class="collapse navbar-collapse"
-            id="navbarNav">
-
-                <ul class="navbar-nav ms-auto">
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'index' %}">
-                        <i class="bi bi-house"></i> Home
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'stock' %}">
-                        <i class="bi bi-cash-stack"></i> Stock
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'add' %}">
-                        <i class="bi bi-eye"></i> Stock view
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'supplier' %}">
-                        <i class="bi bi-truck"></i> Supplier
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                        href="{% url 'supplier_view' %}">
-                        <i class="bi bi-people"></i> Supplier View
-                        </a>
-                    </li>
-
-
-            <li class="nav-item"><a class="nav-link" href="{% url 'sales' %}"><i class="bi bi-cart"></i> Sales</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'save' %}"><i class="bi bi-table"></i> Saved Sales</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'customer' %}"><i class="bi bi-people"></i> Customers</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'customer_list' %}"><i class="bi bi-person-plus"></i> Customer List</a></li> 
-            <li class="nav-item"><a class="nav-link" href="{% url 'reports' %}"><i class="bi bi-graph-up"></i> Reports</a></li> 
-            
-        <a href="{% url 'dashboard' %}">
-            <i class="bi bi-speedometer2"></i> Dashboard
+        <a class="navbar-brand" href="{% url 'index' %}">
+            NyondoStock
         </a>
 
-                </ul>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'stock' %}">
+                        <i class="fa-solid fa-boxes-stacked"></i> Stock
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'add' %}">
+                        <i class="fa-solid fa-eye"></i> Stock View
+                    </a>
+                </li>
+
+                {% if request.user.is_superuser %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'supplier' %}">
+                        <i class="fa-solid fa-truck"></i> Supplier
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'supplier_view' %}">
+                        <i class="fa-solid fa-warehouse"></i> Supplier View
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sales' %}">
+                        <i class="fa-solid fa-cart-shopping"></i> Sales
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'save' %}">
+                        <i class="fa-solid fa-table-list"></i> Saved Sales
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer' %}">
+                        <i class="fa-solid fa-users"></i> Customer
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'customer_list' %}">
+                        <i class="fa-solid fa-users"></i> Customer View
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reports' %}">
+                        <i class="fa-solid fa-chart-bar"></i> Reports
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- TITLE -->
+<div class="page-title">
+    <h2>Supply on Credit </h2>
+    <p>Add and manage supplier  deliveries efficiently</p>
+</div>
+
+<!-- FORM -->
+<div class="form-container">
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="{% url 'supplier' %}" novalidate>
+        {% csrf_token %}
+
+        <div class="section-title">Product Details</div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Item</label>
+                <input type="text" name="product_name"
+                       value="{{ data.product_name }}"
+                       class="form-control {% if errors.product_name %}error-input{% endif %}">
+                {% if errors.product_name %}
+                    <small class="error-text">{{ errors.product_name }}</small>
+                {% endif %}
             </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number" name="quantity"
+                       value="{{ data.quantity }}"
+                       class="form-control {% if errors.quantity %}error-input{% endif %}">
+                {% if errors.quantity %}
+                    <small class="error-text">{{ errors.quantity }}</small>
+                {% endif %}
+            </div>
         </div>
 
-    </nav>
+        <div class="section-title">Supplier Details</div>
 
-    <!-- PAGE TITLE -->
-
-    <div class="page-title">
-
-        <h2>Supply Management</h2>
-
-        <p>Add and manage supplier deliveries efficiently</p>
-
-    </div>
-
-    <!-- FORM -->
-
-    <div class="form-container">
-
-        <form method="POST"
-        action="{% url 'supplier' %}">
-
-            {% csrf_token %}
-
-            <!-- PRODUCT DETAILS -->
-
-            <div class="section-title">
-                Product Details
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Supplier Name</label>
+                <input type="text" name="supplier_name"
+                       value="{{ data.supplier_name }}"
+                       class="form-control {% if errors.supplier_name %}error-input{% endif %}">
+                {% if errors.supplier_name %}
+                    <small class="error-text">{{ errors.supplier_name }}</small>
+                {% endif %}
             </div>
 
-            <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Supplier Contact</label>
+                <input type="text" name="supplier_contact"
+                       value="{{ data.supplier_contact }}"
+                       class="form-control {% if errors.supplier_contact %}error-input{% endif %}">
+                {% if errors.supplier_contact %}
+                    <small class="error-text">{{ errors.supplier_contact }}</small>
+                {% endif %}
+            </div>
+        </div>
 
-                <div class="col-md-6 mb-4">
+        <div class="section-title">Payment Details</div>
 
-                    <label class="form-label">
-                        Item
-                    </label>
-
-                    <input type="text"
-                    name="product_name"
-                    class="form-control"
-                    required>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Quantity
-                    </label>
-
-                    <input type="number"
-                    name="quantity"
-                    class="form-control"
-                    required>
-
-                </div>
-
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Cost Price</label>
+                <input type="number" name="cost_price"
+                       value="{{ data.cost_price }}"
+                       class="form-control {% if errors.cost_price %}error-input{% endif %}">
+                {% if errors.cost_price %}
+                    <small class="error-text">{{ errors.cost_price }}</small>
+                {% endif %}
             </div>
 
-            <!-- SUPPLIER DETAILS -->
-
-            <div class="section-title">
-                Supplier Details
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Date</label>
+                <input type="date" name="date"
+                       value="{{ data.date }}"
+                       min="{{ one_week_ago }}"
+                       max="{{ today }}"
+                       class="form-control {% if errors.date %}error-input{% endif %}">
+                {% if errors.date %}
+                    <small class="error-text">{{ errors.date }}</small>
+                {% endif %}
             </div>
 
-            <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Payment Method</label>
+                <select name="method_of_payment"
+                        class="form-select {% if errors.method_of_payment %}error-input{% endif %}">
+                    <option value="">Select</option>
+                    <option value="cash" {% if data.method_of_payment == 'cash' %}selected{% endif %}>Cash</option>
+                    <option value="credit" {% if data.method_of_payment == 'credit' %}selected{% endif %}>Credit</option>
+                </select>
 
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Supplier Name
-                    </label>
-
-                    <input type="text"
-                    name="supplier_name"
-                    class="form-control"
-                    required>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
-
-                    <label class="form-label">
-                        Supplier Contact
-                    </label>
-
-                    <input type="text"
-                    name="supplier_contact"
-                    class="form-control"
-                    required>
-
-                </div>
-
+                {% if errors.method_of_payment %}
+                    <small class="error-text">{{ errors.method_of_payment }}</small>
+                {% endif %}
             </div>
+        </div>
 
-            <!-- PAYMENT DETAILS -->
+        <div class="mb-3">
+            <label class="form-label">Amount Paid</label>
+            <input type="number" name="amount_paid"
+                   value="{{ data.amount_paid }}"
+                   class="form-control">
+        </div>
 
-            <div class="section-title">
-                Payment Details
-            </div>
+        <button type="submit" class="submit-btn">
+            Add Supply Record
+        </button>
+    </form>
+</div>
 
-            <div class="row">
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Cost Price
-                    </label>
-
-                    <input type="number"
-                    name="cost_price"
-                    class="form-control"
-                    required>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Date Supplied
-                    </label>
-
-                    <input type="date"
-                    name="date"
-                    class="form-control"
-                    min="{{ one_week_ago }}"
-                    max="{{ today }}"
-                    required>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <label class="form-label">
-                        Payment Method
-                    </label>
-
-                    <select name="method_of_payment"
-                    class="form-select"
-                    required>
-
-                        <option value="cash">
-                            Cash
-                        </option>
-
-                        <option value="credit">
-                            Credit
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="mb-4">
-
-                <label class="form-label">
-                    Amount Paid
-                </label>
-
-                <input type="number"
-                name="amount_paid"
-                class="form-control"
-                placeholder="Enter amount paid if on credit">
-
-            </div>
-
-            <!-- BUTTON -->
-
-            <button type="submit"
-            class="submit-btn">
-
-                <i class="bi bi-plus-circle"></i>
-                Add Supply Record
-
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- FOOTER -->
-
-    <footer>
-
-        © 2026 NyondoStock Hardware Inventory System
-
-    </footer>
+     <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
 
 </body>
 </html>

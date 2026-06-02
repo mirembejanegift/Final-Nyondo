@@ -15,14 +15,13 @@
 
         body{
             font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            background:  #e6ecff;
             color: #333;
         }
 
-        /* ================= NAVBAR ================= */
 
         .navbar{
-            background: #0d6efd;
+            background: #1E3A8A;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
@@ -46,13 +45,11 @@
             text-decoration: underline;
         }
 
-        /* ================= CONTAINER ================= */
-
         .container{
             padding: 30px;
         }
 
-        /* HEADER */
+   
 
         .header{
             display: flex;
@@ -75,7 +72,6 @@
             font-weight: bold;
         }
 
-        /* SUMMARY */
 
         .summary-container{
             display: grid;
@@ -109,7 +105,6 @@
             color: #0d6efd;
         }
 
-        /* GRID */
 
         .report-grid{
             display: grid;
@@ -130,7 +125,6 @@
             color: #0d6efd;
         }
 
-        /* TABLE */
 
         table{
             width: 100%;
@@ -152,7 +146,6 @@
             background: #f5f5f5;
         }
 
-        /* ALERT */
 
         .alert-item{
             background: #fff3cd;
@@ -162,7 +155,6 @@
             border-left: 5px solid orange;
         }
 
-        /* TOP PRODUCTS */
 
         .product-item{
             display: flex;
@@ -171,16 +163,15 @@
             border-bottom: 1px solid #eee;
         }
 
-        /* FOOTER */
 
         .footer{
             text-align: center;
             padding: 20px;
-            color: #666;
+            color: white;
             font-size: 14px;
+            background-color: #1E3A8A;
         }
 
-        /* RESPONSIVE */
 
         @media(max-width: 900px){
             .report-grid{
@@ -193,7 +184,7 @@
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+
 
 <div class="navbar">
     <h2>NyondoStock</h2>
@@ -201,13 +192,14 @@
     <div class="nav-links">
         <a href="{% url 'dashboard' %}">Dashboard</a>
         <a href="{% url 'reports' %}">Reports</a>
-        <a href="{% url 'sales' %}">Sales</a>
-        <a href="{% url 'stock' %}">Stock</a>
+        <a href="{% url 'save' %}">Sales</a>
+        <a href="{% url 'add' %}">Stock</a>
+        <a href="{% url 'customer' %}">Customer</a>
+        <a href="{% url 'supplier_view' %}">Supplier</a>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
 </div>
 
-<!-- ================= PAGE ================= -->
 
 <div class="container">
 
@@ -321,8 +313,9 @@
 </div>
 
 <div class="footer">
-    © 2026 NyondoStock System
+
+    <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
 </div>
 
 </body>
-</html>
+</h

@@ -4,14 +4,13 @@ from django.utils.timezone import now
 # Create your models here.
 
 class Stock(models.Model):
-    name = models.CharField(max_length=100, unique=True) 
+    name = models.CharField(max_length=100,) 
     category = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField(default=0)
     supplier = models.CharField(max_length=100, null=True)
     cost_price = models.PositiveIntegerField(default=0)
     selling_price = models.PositiveIntegerField(default=0)
     date = models.DateField()
-    specifications = models.CharField(max_length=100, null=True)
 
 
     def __str__(self):
@@ -72,33 +71,3 @@ class Supplier(models.Model):
     def __str__(self):
         return self.supplier_name
     
-
-    # def save(self, *args, **kwargs):
-
-    #     # calculate total cost
-    #     self.total_cost = self.quantity * self.cost_price
-
-    #     # calculate balance
-    #     self.balance = self.total_cost - self.amount_paid
-
-    #     # save supplier first
-    #     super().save(*args, **kwargs)
-
-    #     # update stock automatically
-    #     stock, created = Stock.objects.get_or_create(
-    #         name=self.product_name,
-    #         defaults={
-    #             'quantity': 0,
-    #             'cost_price': self.cost_price,
-    #             'selling_price': 0,
-    #             'date': self.date
-    #         }
-    #     )
-
-    #     # increase stock quantity
-    #     stock.quantity += self.quantity
-
-    #     # update cost price
-    #     stock.cost_price = self.cost_price
-
-    #     stock.save()
