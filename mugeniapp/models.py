@@ -4,15 +4,13 @@ from django.utils.timezone import now
 # Create your models here.
 
 class Stock(models.Model):
-    name = models.CharField(max_length=100,) 
+    name = models.CharField(max_length=100, unique=True) 
     category = models.CharField(max_length=100)
     quantity = models.PositiveIntegerField(default=0)
     supplier = models.CharField(max_length=100, null=True)
     cost_price = models.PositiveIntegerField(default=0)
     selling_price = models.PositiveIntegerField(default=0)
     date = models.DateField()
-
-
     def __str__(self):
      return self.name
     

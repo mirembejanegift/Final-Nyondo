@@ -25,6 +25,12 @@
       align-items:center;
     }
 
+    nav .logo{
+      color: white !important;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
     nav ul{
       list-style:none;
       display:flex;
@@ -157,7 +163,8 @@
             ><i class="fa-solid fa-cart-shopping"></i>Sales</a
           >
         </li>
-      
+       
+        <!-- "Only show the code inside this block if the currently logged-in user is a superuser (administrator)." -->
            {% if request.user.is_superuser %}
 
         <li>
@@ -300,9 +307,7 @@
 
 </div>
 
-<footer>
-  © 2026 NyondoStock
-</footer>
+    <footer>&copy; 2026 NyondoStock Hardware Inventory System</footer>
 
 </body>
 </html>

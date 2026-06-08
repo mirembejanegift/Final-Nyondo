@@ -80,7 +80,7 @@
       }
 
       .add-btn {
-        background: #16a34a;
+        background: #1e3a8a;
         color: white;
         padding: 0.8rem 1.2rem;
         border-radius: 0.5rem;
@@ -177,8 +177,10 @@
             ><i class="fa-solid fa-eye"></i>Stock View</a
           >
         </li>
-           {% if request.user.is_superuser %}
-
+        
+     
+        <!-- "Only show the code inside this block if the currently logged-in user is a superuser (administrator)." -->
+       {% if request.user.is_superuser %}
         <li>
           <a href="{% url 'supplier' %}"
             ><i class="fa-solid fa-truck"></i>Supplier</a

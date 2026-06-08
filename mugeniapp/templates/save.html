@@ -26,9 +26,9 @@ body{
 }
 
 /* NAVBAR */
-/* NAVBAR */
+
 nav{
-    background: linear-gradient(135deg, #1E3A8A, #2563eb);
+    background:  #1E3A8A;
     padding: 14px 40px;
     display: flex;
     justify-content: space-between;
@@ -312,6 +312,7 @@ footer{
           >
         </li>
       
+        <!-- "Only show the code inside this block if the currently logged-in user is a superuser (administrator)." -->
            {% if request.user.is_superuser %}
 
         <li>
